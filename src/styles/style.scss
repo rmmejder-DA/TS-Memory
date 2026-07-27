@@ -3,6 +3,28 @@ body {
     background-color: #303131;
 }
 
+.setting__body {
+    height: 100vh;
+    background-color: white;
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-around;
+
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.startplay__button {
+    background-image: url('/dist/assets/setting-icon/start_default.png');
+    background-size: auto;
+    background-repeat: no-repeat;
+    width: 130px;
+    height: 55px;
+    cursor: pointer;
+}
+
 .readyplay__button {
     background-image: url('/public/icon/Primary-button.png');
     background-size: auto;
@@ -86,25 +108,22 @@ body {
     }
 }
 
-.game__themes {
+.setting__left--content,
+.setting__right--content {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 50px;
-    margin-top: 50px;
+}
 
-    &__theme {
-        width: 200px;
-        height: 200px;
-        background-color: #fff;
-        border-radius: 10px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+.exit__button {
+    background-image: url('dist/assets/setting-icon/secondary button.png');
+    height: 23px;
+    width: 85px;
+    cursor: pointer;
+    border: none;
+}
 
-        &--selected {
-            border: 5px solid #fff;
-        }
-    }
+.setting__preview {
+    background-color: #9e9c9c !important;
 }

@@ -7,8 +7,8 @@
     <title>Setting</title>
 </head>
 
-<body>
-    <main>
+<body class="setting__body">
+    <main class="main-content">
         <section class="setting__left--content">
             <h1>Setting</h1>
             <form class="game__themes">
@@ -23,7 +23,7 @@
                 </div>
             </form>
             <form>
-                <h2>Choose player</h2>
+                <label for="player">Choose player:</label>
                 <div class="game__players">
                     <div class="game__players__player">
                         <input type="radio" value="player1" name="player" id="player1">
@@ -35,7 +35,7 @@
                     </div>
             </form>
             <form>
-                <h3>Board Size</h3>
+                <label for="board">Board Size:</label>
                 <div class="game__board">
                     <div class="game__board__size">
                         <input type="radio" value="4x4" name="board" id="16">
@@ -51,7 +51,29 @@
                     </div>
             </form>
         </section>
+        <section class="setting__right--content">
+            <div id="setting__preview">
+                <div class="playersView">
+                    <p id="blue">Blue<span id="counter">0</span></p>
+                    <p id="orange">Orange<span id="counter">0</span></p>
+                </div>
+                <div class="current_Player" id="current_Player">
+                    <p>Current Player: <span id="currentPlayer">Blue</span></p>
+                </div>
+                <button id="exit_game" class="exit__button"></button>
+            </div>
+            <div id="themes__preview">
+                <img src="${themePreviewUrl}" alt="light theme" id="light-theme-preview">
+            </div>
+            <footer>
+                <span id="themeview">Game theme</span>
+                <span id="playerview">Player</span>
+                <span id="boardview">Board size</span>
+                <button id="readyplay" class="startplay__button"></button>
+            </footer>
+        </section>
     </main>
+    <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
