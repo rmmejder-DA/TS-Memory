@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory</title>
-    <link rel="stylesheet" href="./src/styles/style.scss">
 </head>
 
 <body class="readyplay">
@@ -15,9 +14,13 @@
                 <p>It's play time.</p>
                 <h1>Ready to play?</h1>
             </div>
-            <button onclick="window.location.href='setting.html';" class="readyplay__button"></button>
+            <button onclick="window.location.href='setting.html';" class="readyplay__button">
+                <img class="readyplay__button-icon" src="public/icon/controller_small.png" alt="Stadia Controller">
+                <p class="readyplay__button-text">Play</p>
+                <span class="readyplay__button-arrow">&#x2192;</span>
+            </button>
         </div>
-        <img class="readyplay__hero-icon" src="public/icon/stadia_controller.png" alt="Stadia Controller">
+        <img class="readyplay__hero-icon" src="/icon/stadia_controller.png" alt="Stadia Controller">
     </div>
     <script type="module" src="/src/main.ts"></script>
 </body>

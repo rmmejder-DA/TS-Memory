@@ -10,11 +10,11 @@
 <body class="setting__body">
     <main class="main-content">
         <section class="setting__left--content">
-            <h1>Setting</h1>
+            <h1 class="setting__title">Settings</h1>
             <form class="game__themes">
-                <label for="theme">Game themes:</label>
+                <label for="theme"><img src="/icon/palette.png" alt="Palette">Game themes:</label>
                 <div class="game__themes__theme">
-                    <input type="radio" value="light" name="theme" id="light-theme">
+                    <input type="radio" value="light" name="theme" id="light-theme" checked>
                     <label for="light-theme">Code vibes theme</label>
                 </div>
                 <div class="game__themes__theme">
@@ -22,9 +22,9 @@
                     <label for="dark-theme">Da Projects theme</label>
                 </div>
             </form>
-            <form>
-                <label for="player">Choose player:</label>
-                <div class="game__players">
+
+            <form class="game__players">
+                <label for="player"> <img src="/icon/chess_pawn.png" alt="Player">Choose player:</label>
                     <div class="game__players__player">
                         <input type="radio" value="player1" name="player" id="player1">
                         <label for="player1">Blue</label>
@@ -34,15 +34,15 @@
                         <label for="player2">Orange</label>
                     </div>
             </form>
-            <form>
-                <label for="board">Board Size:</label>
-                <div class="game__board">
+
+            <form class="game__board">
+                <label for="board"> <img src="/icon/card.png" alt="Board">Board Size:</label>
                     <div class="game__board__size">
                         <input type="radio" value="4x4" name="board" id="16">
                         <label for="16">16</label>
                     </div>
                     <div class="game__board__size">
-                        <input type="radio" value="6x6" name="board" id="24">
+                        <input type="radio" value="4x6" name="board" id="24">
                         <label for="24">24</label>
                     </div>
                     <div class="game__board__size">
@@ -52,25 +52,20 @@
             </form>
         </section>
         <section class="setting__right--content">
-            <div id="setting__preview">
-                <div class="playersView">
-                    <p id="blue">Blue<span id="counter">0</span></p>
-                    <p id="orange">Orange<span id="counter">0</span></p>
-                </div>
-                <div class="current_Player" id="current_Player">
-                    <p>Current Player: <span id="currentPlayer">Blue</span></p>
-                </div>
-                <button id="exit_game" class="exit__button"></button>
-            </div>
-            <div id="themes__preview">
-                <img src="${themePreviewUrl}" alt="light theme" id="light-theme-preview">
-            </div>
-            <footer>
+            <img id="theme-preview" src="/images/vibe-style.png" alt="Code vibes theme" class="themes-img">
+            <div class="startplay__wrapper">
                 <span id="themeview">Game theme</span>
+                <span class="line"></span>
                 <span id="playerview">Player</span>
+                <span class="line"></span>
                 <span id="boardview">Board size</span>
-                <button id="readyplay" class="startplay__button"></button>
-            </footer>
+
+                <button id="readyplay" class="startplay__button">
+                    <img class="startplay__button-icon" src="/icon/controller_small.png" alt="Stadia Controller">
+                    <p class="startplay__button-text">Start</p>
+                    <span class="startplay__button-arrow">&#x2192;</span>
+                </button>
+            </div>
         </section>
     </main>
     <script type="module" src="/src/main.ts"></script>
