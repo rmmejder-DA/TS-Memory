@@ -12,42 +12,42 @@
         <section class="setting__left--content">
             <h1 class="setting__title">Settings</h1>
             <form class="game__themes">
-                <label for="theme"><img src="/icon/palette.png" alt="Palette">Game themes:</label>
+                <b for="theme"><img src="/icon/palette.png" alt="Palette">Game themes:</b>
                 <div class="game__themes__theme">
                     <input type="radio" value="light" name="theme" id="light-theme" checked>
                     <label for="light-theme">Code vibes theme</label>
                 </div>
                 <div class="game__themes__theme">
                     <input type="radio" value="dark" name="theme" id="dark-theme">
-                    <label for="dark-theme">Da Projects theme</label>
+                    <label for="dark-theme">Foods theme</label>
                 </div>
             </form>
 
             <form class="game__players">
-                <label for="player"> <img src="/icon/chess_pawn.png" alt="Player">Choose player:</label>
+                <b for="player"> <img src="/icon/chess_pawn.png" alt="Player">Choose player:</b>
                     <div class="game__players__player">
-                        <input type="radio" value="player1" name="player" id="player1">
+                        <input type="checkbox" class="player-radio" value="player1" name="player" id="player1">
                         <label for="player1">Blue</label>
                     </div>
                     <div class="game__players__player">
-                        <input type="radio" value="player2" name="player" id="player2">
+                        <input type="checkbox" class="player-radio" value="player2" name="player" id="player2">
                         <label for="player2">Orange</label>
                     </div>
             </form>
 
             <form class="game__board">
-                <label for="board"> <img src="/icon/card.png" alt="Board">Board Size:</label>
+                <b for="board"> <img src="/icon/card.png" alt="Board">Board Size:</b>
                     <div class="game__board__size">
                         <input type="radio" value="4x4" name="board" id="16">
-                        <label for="16">16</label>
+                        <label for="16">16 cards</label>
                     </div>
                     <div class="game__board__size">
                         <input type="radio" value="4x6" name="board" id="24">
-                        <label for="24">24</label>
+                        <label for="24">24 cards</label>
                     </div>
                     <div class="game__board__size">
                         <input type="radio" value="6x6" name="board" id="36">
-                        <label for="36">36</label>
+                        <label for="36">36 cards</label>
                     </div>
             </form>
         </section>
@@ -57,6 +57,7 @@
                 <span id="themeview">Game theme</span>
                 <span class="line"></span>
                 <span id="playerview">Player</span>
+                <div id="player-preview" class="player-preview"></div>
                 <span class="line"></span>
                 <span id="boardview">Board size</span>
 
