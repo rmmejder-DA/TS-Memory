@@ -24,7 +24,7 @@ function init() {
 function initThemeSelector() {
     const themePreview = document.getElementById("theme-preview") as HTMLImageElement | null
     const themeView = document.getElementById("themeview")
-    const themeMap: Record<string, { src:string; label:string }> = { light:{src:"/images/vibe-style.png",label:"Code vibes theme"}, dark:{src:"/images/da-style.png",label:"Foods theme"} }
+    const themeMap: Record<string, { src:string; label:string }> = { light:{src:"/images/da-style.png",label:"Code vibes theme"}, dark:{src:"/images/vibe-style.png",label:"Foods theme"} }
     const applyTheme = (key:string) => { const theme = themeMap[key] ?? themeMap.light; if(themePreview){themePreview.src=theme.src;themePreview.alt=theme.label;} if(themeView) themeView.textContent = theme.label }
     const hoverTheme = (key:string) => { if(themePreview) themePreview.src = themeMap[key]?.src ?? themeMap.light.src }
     if(!themePreview) return

@@ -10,6 +10,20 @@
 </head>
 
 <body>
+    <header class="play__header">
+        <div id="playerview">
+            <img src="/public/icon/chess_pawn.png" alt="choosePlayer">
+            <span id="counter">0</span>
+        </div>
+        <div id="currentPlayer" class="play__header__currentPlayer">
+            <p>Current player</p>
+            <img id="player" src="/public/icon/chess_pawn.png">
+        </div>
+        <button class="exitGame">
+            <img src="/public/icon/move_item.png" alt="exit">
+            <p class="exitGame">Exit game</p>
+        </button>
+    </header>
     <section id="field">
         <button class="card" type="button" aria-label="Memory card" title="Memory card">
             <div class="card__inner">
@@ -18,10 +32,7 @@
             </div>
         </button>
     </section>
-<script type="module" src="./src/main.ts"></script>
-
-
-
+    <script type="module" src="./src/main.ts"></script>
 </body>
 
 </html>
