@@ -18,20 +18,223 @@ function init() {
 
     const fieldRef = document.getElementById("field")
     if (fieldRef) {
-        fieldRef.addEventListener("click", e => {
-            const card = (e.target as HTMLElement).closest(".card") as HTMLButtonElement
-            if (card) {
-                card.classList.toggle("is-flipped")
+        initGameplay()
+    }
+}
+
+function initGameplay() {
+    const field = document.getElementById("field")
+    const currentPlayerImage = document.getElementById("player") as HTMLImageElement | null
+    const currentPlayerLabel = document.querySelector<HTMLElement>("#currentPlayer p")
+    const currentPlayerContainer = document.getElementById("currentPlayer")
+    const scoreSpans = Array.from(document.querySelectorAll<HTMLElement>("#playerview span"))
+    if (!field) return
+
+    // Apply theme class to body
+    const selectedTheme = localStorage.getItem('selectedTheme') ?? 'light'
+    document.body.className = selectedTheme === 'light' ? 'theme-code' : 'theme-food'
+
+    const storedPlayers = localStorage.getItem("selectedPlayers")
+    let players = ["player1", "player2"]
+
+    if (storedPlayers) {
+        try {
+            const parsed = JSON.parse(storedPlayers)
+            if (Array.isArray(parsed) && parsed.length) {
+                players = parsed
+                // Wenn nur 1 Spieler ausgewählt, den zweiten hinzufügen
+                if (players.length === 1) {
+                    const other = players[0] === "player1" ? "player2" : "player1"
+                    players.push(other)
+                }
+                // Maximal 2 Spieler
+                players = players.slice(0, 2)
             }
+        } catch {
+            players = ["player1", "player2"]
+        }
+    }
+
+    let currentPlayerIndex = 0
+    let openedCards: HTMLButtonElement[] = []
+    let lockBoard = false
+    let gameOver = false
+    const scores = players.map(() => 0)
+    const openedCardsByPlayer = players.map(() => 0)
+    const totalPairs = field.querySelectorAll('.card').length / 2
+    let matchedPairs = 0
+
+    const getPlayerLabel = (value: string) => value === "player1" ? "Blue" : value === "player2" ? "Orange" : value
+
+    const getPlayerIcon = (player: string) => {
+        if (selectedTheme === 'light') {
+            // Code vibes theme: code-blue.png und orange-player.png
+            return player === "player1" ? "/public/icon/code-blue-player.png" : "/public/icon/code-orange-player.png"
+        } else {
+            // Foods theme: chess pawns
+            return player === "player1" ? "/public/icon/chess_pawn-blue.png" : "/public/icon/chess_pawn-orange.png"
+        }
+    }
+
+    const updateScoresUI = () => {
+        scoreSpans.forEach((span, index) => {
+            span.textContent = String(scores[index] ?? 0)
         })
     }
+
+    const updateCurrentPlayerUI = () => {
+        const activePlayer = players[currentPlayerIndex] ?? "player1"
+        if (currentPlayerImage) {
+            currentPlayerImage.src = getPlayerIcon(activePlayer)
+            currentPlayerImage.style.filter = ""
+        }
+        if (currentPlayerLabel) {
+            currentPlayerLabel.textContent = "Current player:"
+        }
+        if (currentPlayerContainer) {
+            currentPlayerContainer.className = "play__header__currentPlayer"
+        }
+    }
+
+    const nextTurn = () => {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length
+        updateCurrentPlayerUI()
+    }
+
+    const showGameOver = () => {
+        if (document.querySelector('.game-over')) return
+
+        // Bestimme den Gewinner
+        const maxScore = Math.max(...scores)
+        const winnerIndex = scores.indexOf(maxScore)
+        const winner = players[winnerIndex] ?? "player1"
+        const winnerLabel = getPlayerLabel(winner)
+
+        // Game Over Score Overlay
+        const overlay = document.createElement('div')
+        overlay.className = 'game-over'
+        overlay.innerHTML = `
+            <div class="game-over__content">
+                <h2>Game Over</h2>
+                <p class="game-over__title">Final score</p>
+                <ul class="game-over__list">
+                    ${players.map((player, index) => `
+                        <li class="game-over__item game-over__item--${player}">
+                            <span>${getPlayerLabel(player)}</span>
+                            <span>${scores[index] ?? 0}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `
+        document.body.appendChild(overlay)
+
+        // Winner Modal (separates Overlay)
+        setTimeout(() => {
+            const winnerOverlay = document.createElement('div')
+            winnerOverlay.className = 'winner-modal'
+            winnerOverlay.innerHTML = `
+                <div class="winner-modal__content">
+                    <img src="/public/images/Confetti.png" alt="confetti" class="winner-modal__image">
+                    <p class="winner-modal__label">The winner is</p>
+                    <p class="winner-modal__text winner-modal__text--${winner}">
+                        ${winnerLabel} Player
+                    </p>
+                    <img src="${getPlayerIcon(winner)}" alt="player icon" class="winner-modal__pawn winner-modal__pawn--${winner}">
+                    <button id="backToStart" class="winner-modal__button">
+                        Back to start
+                    </button>
+                </div>
+            `
+            document.body.appendChild(winnerOverlay)
+
+            // Back to Start Button Handler
+            const backBtn = document.getElementById('backToStart')
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    window.location.href = '/setting.html'
+                })
+            }
+        }, 1500)
+    }
+
+    field.addEventListener("click", e => {
+        const target = e.target as HTMLElement | null
+        const card = target?.closest(".card") as HTMLButtonElement | null
+
+        if (!card || lockBoard || gameOver || card.classList.contains("is-flipped") || card.dataset.matched === "true") {
+            return
+        }
+
+        if (openedCards.length >= 2) {
+            return
+        }
+
+        card.classList.add("is-flipped")
+        openedCardsByPlayer[currentPlayerIndex] += 1
+        openedCards.push(card)
+
+        if (openedCards.length < 2) {
+            return
+        }
+
+        const [firstCard, secondCard] = openedCards
+        const firstImage = firstCard.dataset.image
+        const secondImage = secondCard.dataset.image
+
+        if (firstImage && secondImage && firstImage === secondImage) {
+            firstCard.dataset.matched = "true"
+            secondCard.dataset.matched = "true"
+            scores[currentPlayerIndex] += 1
+            matchedPairs += 1
+            updateScoresUI()
+            openedCards = []
+
+            if (matchedPairs >= totalPairs) {
+                gameOver = true
+                showGameOver()
+            }
+            return
+        }
+
+        lockBoard = true
+        setTimeout(() => {
+            firstCard.classList.remove("is-flipped")
+            secondCard.classList.remove("is-flipped")
+            openedCards = []
+            nextTurn()
+            lockBoard = false
+        }, 900)
+    })
+
+    updateScoresUI()
+    updateCurrentPlayerUI()
+
+    // Aktualisiere Header Icons basierend auf Theme
+    const playerViewIcons = document.querySelectorAll<HTMLImageElement>("#playerview img")
+    if (playerViewIcons.length >= 2) {
+        playerViewIcons[0].src = getPlayerIcon("player1")
+        playerViewIcons[1].src = getPlayerIcon("player2")
+    }
+
+    // Für Testing: Game Over manuell aufrufen über window.forceGameOver()
+    ;(window as any).forceGameOver = showGameOver
 }
 
 function initThemeSelector() {
     const themePreview = document.getElementById("theme-preview") as HTMLImageElement | null
     const themeView = document.getElementById("themeview")
     const themeMap: Record<string, { src: string; label: string }> = { light: { src: "/images/da-style.png", label: "Code vibes theme" }, dark: { src: "/images/vibe-style.png", label: "Foods theme" } }
-    const applyTheme = (key: string) => { const theme = themeMap[key] ?? themeMap.light; if (themePreview) { themePreview.src = theme.src; themePreview.alt = theme.label; } if (themeView) themeView.textContent = theme.label }
+    const applyTheme = (key: string) => { 
+        const theme = themeMap[key] ?? themeMap.light
+        if (themePreview) { 
+            themePreview.src = theme.src
+            themePreview.alt = theme.label
+        } 
+        if (themeView) themeView.textContent = theme.label
+        // Speichere das Theme in localStorage
+        localStorage.setItem('selectedTheme', key)
+    }
     const hoverTheme = (key: string) => { if (themePreview) themePreview.src = themeMap[key]?.src ?? themeMap.light.src }
     if (!themePreview) return
     const radios = document.querySelectorAll<HTMLInputElement>('input[name="theme"]')
@@ -48,12 +251,22 @@ function initPlayerSelector() {
     const preview = document.getElementById("player-preview")
     const playerView = document.getElementById("playerview")
     const boxes = document.querySelectorAll<HTMLInputElement>('input[name="player"]')
+
     if (!preview || !boxes.length) return
+
     const update = () => {
         const selected = Array.from(boxes).filter(r => r.checked)
-        preview.innerHTML = selected.map(r => `<img src="/icon/currentBlue.png" class="${r.value === 'player1' ? 'blue' : 'orange'}" alt="${r.value}">`).join("")
+        preview.innerHTML = selected.map(r => `<img src="${r.value === 'player1' ? '/public/icon/chess_pawn-blue.png' : '/public/icon/chess_pawn-orange.png'}" alt="${r.value}">`).join("")
+        preview.style.display = selected.length ? "block" : "none"
         if (playerView) playerView.style.display = selected.length ? "none" : "inline"
+
+        if (selected.length) {
+            localStorage.setItem("selectedPlayers", JSON.stringify(selected.map(r => r.value)))
+        } else {
+            localStorage.removeItem("selectedPlayers")
+        }
     }
+
     boxes.forEach(box => box.addEventListener("change", update))
     update()
 }
@@ -79,17 +292,27 @@ function initBoardSelector() {
 function renderField(count: number) {
     const field = document.getElementById('field')
     if (!field) return
-    const cols = count === 16 ? 4 : count === 24 ? 6 : 6
-    field.style.gridTemplateColumns = `repeat(${cols}, minmax(90px, 1fr))`
-    field.style.gridAutoRows = 'minmax(90px, 1fr)'
-    const images = ['pizza.png','burger.png','sushi.png','hotdog.png','fries.png','cake.png','ice.png','taco.png','sandwich.png','pudding.png','macaron.png','choclate.png','dessert.png','wrap.png','salad.png','brezel.png','wrap.png','brezel.png']
+    
+    // Hole das gespeicherte Theme, standardmäßig 'light' (Code vibes)
+    const selectedTheme = localStorage.getItem('selectedTheme') ?? 'light'
+    
+    // Code vibes theme Bilder (tatsächliche Dateien aus /public/card-img-da/)
+    const daImages = ['angular.png', 'cmd.png', 'django.png', 'node.png', 'react.png', 'sass.png', 'vscode.png', 'visual.png', 'BB.png', 'blue-yellow.png', 'card1.png', 'Cards 5.png', 'Cards1.png', 'Cards2.png', 'card_front.png', 'Javascript Logo 1.png', 'Vector.png', 'Vector1.png']
+    
+    // Foods theme Bilder
+    const foodImages = ['pizza.png', 'burger.png', 'sushi.png', 'hotdog.png', 'fries.png', 'cake.png', 'ice.png', 'taco.png', 'sandwich.png', 'pudding.png', 'macaron.png', 'choclate.png', 'dessert.png', 'wrap.png', 'salad.png', 'brezel.png', 'wrap.png', 'brezel.png']
+    
+    // Wähle die richtigen Bilder basierend auf dem Theme
+    const images = selectedTheme === 'light' ? daImages : foodImages
+    const imagePath = selectedTheme === 'light' ? '/card-img-da/' : '/card-img-food/'
+    
     const pairs = count / 2
     const backs = images.slice(0, pairs)
     const deck = [...backs, ...backs].sort(() => Math.random() - 0.5)
     let html = ''
     for (let i = 0; i < deck.length; i++) {
         const src = deck[i]
-        html += `<button class="card"><div class="card__inner"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><img src="/card-img-food/${src}" alt="card"></div></div></button>`
+        html += `<button class="card" data-image="${src}"><div class="card__inner"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><img src="${imagePath}${src}" alt="card"></div></div></button>`
     }
     field.innerHTML = html
 }
@@ -108,12 +331,35 @@ allradioCheked()
 function allradioCheked() {
     const readyBtn = document.getElementById('readyplay') as HTMLButtonElement | null;
     const imgs = Array.from(document.getElementsByClassName('startplay__button-icon')) as HTMLImageElement[];
-    const radios = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])'));
+    
     if (!readyBtn) return;
-    const groups = Array.from(new Set(radios.map(r => r.name)));
-    const allSelected = groups.length > 0 && groups.every(n => !!document.querySelector<HTMLInputElement>(`input[type="radio"][name="${n}"]:checked`));
-    readyBtn.disabled = !allSelected;
-    if (allSelected) imgs.forEach(i => i.src = '/icon/smart_display.png');
-    radios.forEach(r => { r.removeEventListener('change', allradioCheked); r.addEventListener('change', allradioCheked); });
 
+    // Prüfe Radio-Buttons (Theme und Board)
+    const radios = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])'));
+    const groups = Array.from(new Set(radios.map(r => r.name)));
+    const radioSelected = groups.length > 0 && groups.every(n => !!document.querySelector<HTMLInputElement>(`input[type="radio"][name="${n}"]:checked`));
+
+    // Prüfe Player-Checkboxes (mindestens eine muss gewählt sein)
+    const playerCheckboxes = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="player"]'));
+    const playerSelected = playerCheckboxes.some(c => c.checked);
+
+    // Aktiviere Start-Button nur wenn alles ausgewählt ist
+    const allSelected = radioSelected && playerSelected;
+    readyBtn.disabled = !allSelected;
+    
+    if (allSelected) {
+        imgs.forEach(i => i.src = '/icon/smart_display.png');
+    } else {
+        imgs.forEach(i => i.src = '/public/icon/smart_display-disabled.png');
+    }
+
+    // Event Listener hinzufügen
+    radios.forEach(r => { 
+        r.removeEventListener('change', allradioCheked); 
+        r.addEventListener('change', allradioCheked); 
+    });
+    playerCheckboxes.forEach(c => {
+        c.removeEventListener('change', allradioCheked);
+        c.addEventListener('change', allradioCheked);
+    });
 }

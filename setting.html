@@ -10,11 +10,12 @@
 <body class="setting__body">
     <main class="main-content">
         <section class="setting__left--content">
-            <h1 class="setting__title">Settings</h1>
+            <h1 class="setting__title">Settings<div class="setting__title--line"></div></h1>
+
             <form class="game__themes">
                 <b for="theme"><img src="/icon/palette.png" alt="Palette">Game themes:</b>
                 <div class="game__themes__theme">
-                    <input type="radio" value="light" name="theme" id="light-theme" checked>
+                    <input type="radio" value="light" name="theme" id="light-theme">
                     <label for="light-theme">Code vibes theme</label>
                 </div>
                 <div class="game__themes__theme">
@@ -24,31 +25,31 @@
             </form>
 
             <form class="game__players">
-                <b for="player"> <img src="/icon/chess_pawn.png" alt="Player">Choose player:</b>
-                    <div class="game__players__player">
-                        <input type="checkbox" class="player-radio" value="player1" name="player" id="player1">
-                        <label for="player1">Blue</label>
-                    </div>
-                    <div class="game__players__player">
-                        <input type="checkbox" class="player-radio" value="player2" name="player" id="player2">
-                        <label for="player2">Orange</label>
-                    </div>
+                <b for="player"> <img src="/public/icon/chess_pawn-blue.png" alt="Player">Choose player:</b>
+                <div class="game__players__player">
+                    <input type="checkbox" class="player-radio" value="player1" name="player" id="player1">
+                    <label for="player1">Blue</label>
+                </div>
+                <div class="game__players__player">
+                    <input type="checkbox" class="player-radio" value="player2" name="player" id="player2">
+                    <label for="player2">Orange</label>
+                </div>
             </form>
 
             <form class="game__board">
                 <b for="board"> <img src="/icon/card.png" alt="Board">Board Size:</b>
-                    <div class="game__board__size">
-                        <input type="radio" value="4x4" name="board" id="16">
-                        <label for="16">16 cards</label>
-                    </div>
-                    <div class="game__board__size">
-                        <input type="radio" value="4x6" name="board" id="24">
-                        <label for="24">24 cards</label>
-                    </div>
-                    <div class="game__board__size">
-                        <input type="radio" value="6x6" name="board" id="36">
-                        <label for="36">36 cards</label>
-                    </div>
+                <div class="game__board__size">
+                    <input type="radio" value="4x4" name="board" id="16">
+                    <label for="16">16 cards</label>
+                </div>
+                <div class="game__board__size">
+                    <input type="radio" value="4x6" name="board" id="24">
+                    <label for="24">24 cards</label>
+                </div>
+                <div class="game__board__size">
+                    <input type="radio" value="6x6" name="board" id="36">
+                    <label for="36">36 cards</label>
+                </div>
             </form>
         </section>
         <section class="setting__right--content">
@@ -62,9 +63,9 @@
                 <span id="boardview">Board size</span>
 
                 <button onclick="window.location.href='play.html';" id="readyplay" class="startplay__button" disabled>
-                    <img class="startplay__button-icon" src="/public/icon/smart_display-disabled.png" alt="Stadia Controller">
+                    <img class="startplay__button-icon" src="/public/icon/smart_display-disabled.png"
+                        alt="Stadia Controller">
                     <p class="startplay__button-text">Start</p>
-                    <span class="startplay__button-arrow">&#x2192;</span>
                 </button>
             </div>
 
