@@ -337,22 +337,55 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
     margin-bottom: 20px;
 
     & h1 {
         font-size: 3rem;
         margin: 0;
     }
-    &__currentPlayer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 
-    & img {
-        width: 36px;
-        height: 36px;
-        object-fit: contain;
+    &__currentPlayer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        & img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
     }
 }
+
+.exitGame {
+    background-color: #415652;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
 }
 
+/* Grid für Spielfeld */
+#field {
+display: inline-grid;
+    gap: 2px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    justify-items: center;
+    align-items: center;
+    padding: 12px;
+        width: 50%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+#field .card {
+    width: 100%;
+    max-width: 120px;
+    aspect-ratio: 1/1;
+}
