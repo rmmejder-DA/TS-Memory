@@ -151,7 +151,8 @@ function initGameplay() {
                 <ul class="game-over__list">
                     ${players.map((player, index) => `
                         <li class="game-over__item game-over__item--${player}">
-                            <span>${getPlayerLabel(player)}</span>
+                            <img src="${getPlayerIcon(player)}" alt="${player}" class="game-over__item__icon">
+
                             <span>${scores[index] ?? 0}</span>
                         </li>
                     `).join('')}

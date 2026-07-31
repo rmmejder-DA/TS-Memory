@@ -4,24 +4,35 @@
     font-weight: 100 900;
 }
 
+@font-face {
+    font-family: 'Patrick Hand';
+    src: url('/public/font/PatrickHand-Regular.ttf') format('truetype');
+    font-weight: 100 900;
+}
+
 body {
     height: 100vh;
-    background-color: #303131;
+
     font-family: 'RedRose', sans-serif;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
-body.theme-food {
-    background-color: white;
+body.theme-food * {
+    font-family: 'Patrick Hand', sans-serif;
+}
+
+body.theme-code * {
+    font-family: 'RedRose', sans-serif;
+    background-color: #303131;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'RedRose', sans-serif;
+
 }
 
 .setting__body {
@@ -715,6 +726,12 @@ body.theme-code .exitGameBtn {
         background-color: #415652;
     }
 
+    &__item__icon {
+        width: 24px;
+        height: 30px;
+        object-fit: contain;
+    }
+
     &__item--player1 span {
         color: #4dd5bc;
         font-weight: bold;
@@ -732,9 +749,10 @@ body.theme-food .game-over {
     &__title {
         font-size: 3rem;
     }
+
     &__content {
         background: #ff9f1c;
-        color: #333;
+        color: white;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -749,11 +767,12 @@ body.theme-food .game-over {
     &__list {
         background-color: white;
         width: min-content;
+    
     }
 
     &__item {
         background-color: #f0e5d9;
-        color: white;
+        color: #333;
     }
 }
 
