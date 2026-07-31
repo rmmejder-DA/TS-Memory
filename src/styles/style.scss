@@ -1,7 +1,13 @@
+@font-face {
+    font-family: 'RedRose';
+    src: url('/font/RedRose-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+}
+
 body {
     height: 100vh;
     background-color: #303131;
-    font-family: 'Inconsolata', monospace;
+    font-family: 'RedRose', sans-serif;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -15,11 +21,7 @@ body.theme-food {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-@font-face {
-    font-family: 'Inconsolata';
-    src: url('/font/Inconsolata-VariableFont_wdth,wght.ttf') format('truetype');
+    font-family: 'RedRose', sans-serif;
 }
 
 .setting__body {
@@ -47,6 +49,11 @@ body.theme-food {
     & span {
         color: black;
         font-size: 1.5rem;
+    }
+
+    & #playerview {
+        width: 80px;
+        text-align: center;
     }
 }
 
@@ -106,9 +113,13 @@ body.theme-food {
     cursor: pointer;
     border: none;
 
+    &:hover {
+        transform: scale(1.05);
+    }
+
     &-icon {
-        width: 42px;
-        height: 30px;
+        width: 34px;
+        height: 26px;
     }
 
     &-text {
@@ -116,30 +127,41 @@ body.theme-food {
         font-weight: bold;
         margin: 0;
     }
-
-    &-arrow {
-        font-size: 2rem;
-        font-weight: bold;
-    }
 }
 
 .readyplay__button {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     background-color: #f0ea6e;
     width: 250px;
     height: 100px;
     cursor: pointer;
+    border: none;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    &:hover .readyplay__button-icon {
+        transform: rotate(-30deg);
+    }
+
+    &:hover .readyplay__button-arrow {
+        transform: scale(1.25);
+    }
 
     &-icon {
         width: 42px;
         height: 30px;
+        transition: transform 0.3s ease;
     }
 
     &-text {
-        font-size: 1.5rem;
+        font-size: 2.5rem;
+        color: #303131;
         font-weight: bold;
         margin: 0;
     }
@@ -279,7 +301,6 @@ body.theme-food .card__face {
 }
 
 .exit__button {
-    background-image: url('/setting-icon/secondary button.png');
     height: 23px;
     width: 85px;
     cursor: pointer;
@@ -453,13 +474,18 @@ body.theme-food .card__face {
         background-color: #415652;
         padding: 10px 30px;
 
+        & #counter {
+            width: 36px;
+            text-align: center;
+        }
+
         & #counter:nth-child(2) {
             color: #097fc5;
             font-size: 2.75rem;
         }
 
         & #counter:nth-child(4) {
-            color: #ea6900;
+            color: #f58e39;
             font-size: 2.75rem;
         }
     }
@@ -479,6 +505,7 @@ body.theme-food .card__face {
         align-items: center;
         gap: 10px;
         color: #fff;
+        font-size: 2rem;
 
         & img {
             width: 24px;
@@ -516,8 +543,9 @@ body.theme-food .card__face {
 body.theme-food .play__header {
     background-color: #f0e5d9;
     color: #333;
-    border-radius: 12px;   
+    border-radius: 12px;
     margin-top: 20px;
+
     & #playerview {
         background-color: white;
         padding: 10px;
@@ -526,24 +554,86 @@ body.theme-food .play__header {
 }
 
 body.theme-food .play__header__currentPlayer {
-    color: #a45212;
+    color: #ff9f1c;
     font-size: 2rem;
 }
 
-body.theme-food .exitGame {
-    background-color: #d4c7b9;
-    color: #333;
-    border: 2px solid #ff9f1c;
+body.theme-food .exitGameBtn {
+    background-color: #fff9f2;
+    color: #ff9f1c;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid #ff9f1c !important;
     border-radius: 12px;
+
+    &__text {
+        font-size: 2rem;
+    }
 
     &:hover {
         background-color: #ff9f1c;
         color: #fff;
         box-shadow: 0 0 15px rgba(255, 159, 28, 0.5);
+        cursor: pointer;
+
+        & img {
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    & img {
+        width: 34px;
+        height: 30px;
+        object-fit: cover;
+        object-position: center;
     }
 
     &:active {
         transform: scale(0.95);
+        background-color: #fff9f2;
+        color: #f39043;
+
+        & img {
+            filter: brightness(1) invert(0)
+        }
+    }
+}
+
+body.theme-code .exitGameBtn {
+    background-color: #415652;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid #4dd5bc !important;
+
+    &__text {
+        font-size: 2rem;
+    }
+
+    & img {
+        width: 34px;
+        height: 30px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &:hover {
+        background-color: #4dd5bc;
+        color: #fff;
+        box-shadow: 0 0 15px #4dd5bc;
+        cursor: pointer;
+
+        & img {
+            filter: brightness(0) invert(1);
+        }
     }
 }
 
@@ -636,6 +726,37 @@ body.theme-food .exitGame {
     }
 }
 
+body.theme-food .game-over {
+    background: #ff9f1c;
+
+    &__title {
+        font-size: 3rem;
+    }
+    &__content {
+        background: #ff9f1c;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    h2 {
+        color: white;
+        text-shadow: none;
+    }
+
+    &__list {
+        background-color: white;
+        width: min-content;
+    }
+
+    &__item {
+        background-color: #f0e5d9;
+        color: white;
+    }
+}
+
 .winner-modal {
     position: fixed;
     inset: 0;
@@ -645,33 +766,29 @@ body.theme-food .exitGame {
     z-index: 2000;
     width: 100vw;
     height: 100vh;
-    background: rgba(48, 49, 49, 0.95);
+    background: #303131;
     padding: 24px;
-    animation: fadeIn 0.5s ease-in-out;
+    animation: slideDown 0.6s ease-out;
 
     &__content {
-        background: transparent;
-        color: #fff;
-        padding: 40px;
-        text-align: center;
+        background: #303131;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         gap: 20px;
-        max-width: 500px;
-        animation: slideUp 0.6s ease-out;
+        width: 100%;
+        height: 100%;
     }
 
     &__image {
-        width: 150px;
-        height: 150px;
-        object-fit: contain;
-        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+        width: 100%;
+        height: 30%;
         animation: bounce 1s ease-in-out infinite;
     }
 
     &__label {
-        font-size: 1.2rem;
+        font-size: 2rem;
         color: #aaa;
         margin: 0;
         font-weight: normal;
@@ -679,46 +796,35 @@ body.theme-food .exitGame {
     }
 
     &__pawn {
-        width: 120px;
-        height: 120px;
+        width: 160px;
+        height: 160px;
         object-fit: contain;
-        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-        animation: bounce 1s ease-in-out infinite;
-        animation-delay: 0.2s;
-    }
-
-    &__pawn--player1 {
-        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-    }
-
-    &__pawn--player2 {
-        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+        margin-bottom: 20px;
     }
 
     &__text {
-        font-size: 3rem;
+        font-size: 5rem;
         font-weight: bold;
         margin: 0;
         letter-spacing: 1px;
     }
 
     &__text--player1 {
-        color: #4dd5bc;
+        color: #097fc5;
         text-shadow: 0 2px 10px rgba(77, 213, 188, 0.3);
     }
 
     &__text--player2 {
-        color: #ff9f1c;
+        color: #f58e39;
         text-shadow: 0 2px 10px rgba(255, 159, 28, 0.3);
     }
 
     &__button {
         padding: 12px 32px;
         font-size: 1.1rem;
-        background-color: #303131;
-        color: #f0ea6e;
-        border: 2px solid #f0ea6e;
-        border-radius: 8px;
+        background-color: #415652;
+        color: white;
+        border: 1px solid #4dd5bc;
         cursor: pointer;
         font-weight: bold;
         transition: all 0.3s ease;
@@ -726,6 +832,142 @@ body.theme-food .exitGame {
         &:hover {
             background-color: #f0ea6e;
             color: #303131;
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+}
+
+.orange {
+    color: #f3832d !important;
+}
+
+.draw-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    width: 100vw;
+    height: 100vh;
+    background: #303131;
+    padding: 24px;
+    animation: slideDown 0.6s ease-out;
+
+    &__content {
+        background: #303131;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        width: 420px;
+        height: 600px;
+    }
+
+    &__image {
+        width: 350px;
+        height: 350px;
+        object-fit: contain;
+    }
+
+    &__label {
+        color: white;
+        font-size: 2rem;
+    }
+
+    &__text {
+        font-size: 8rem;
+        font-weight: bold;
+        margin: 0;
+        letter-spacing: 2px;
+        color: #4dd5bc;
+        text-shadow: 0 2px 15px rgba(77, 213, 188, 0.4);
+    }
+
+    &__button {
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        background-color: #415652;
+        color: white;
+        border: 1px solid #4dd5bc;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: #f0ea6e;
+            color: #303131;
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+}
+
+body.theme-food .draw-modal {
+    background: white;
+
+    &__content {
+        background: white;
+    }
+
+    &__text {
+        color: #f3832d;
+        text-shadow: 0 2px 15px rgba(255, 159, 28, 0.4);
+    }
+
+    &__image {
+        background-color: #f7e6d5;
+        padding: 20px;
+        box-shadow: 9px 9px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &__button {
+        background-color: #d4c7b9;
+        color: #333;
+        border: 1px solid #ff9f1c;
+
+        &:hover {
+            background-color: #ff9f1c;
+            color: #fff;
+        }
+    }
+}
+
+body.theme-food .winner-modal {
+    background: white;
+
+    &__content {
+        background: white;
+    }
+
+    &__label {
+        color: #333;
+    }
+
+    &__text--player1 {
+        color: #097fc5;
+    }
+
+    &__text--player2 {
+        color: #f3832d;
+    }
+
+    &__button {
+        background-color: #ff9f1c;
+        color: white;
+        border: 1px solid #ff9f1c;
+
+        &:hover {
+            background-color: #e68a00;
+            color: white;
             transform: scale(1.05);
         }
 
@@ -748,6 +990,18 @@ body.theme-food .exitGame {
 @keyframes slideUp {
     from {
         transform: translateY(40px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100vh);
         opacity: 0;
     }
 

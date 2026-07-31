@@ -69,10 +69,10 @@ function initGameplay() {
     const getPlayerIcon = (player: string) => {
         if (selectedTheme === 'light') {
             // Code vibes theme: code-blue.png und orange-player.png
-            return player === "player1" ? "/public/icon/code-blue-player.png" : "/public/icon/code-orange-player.png"
+            return player === "player1" ? "/public/icon/chess_pawn-big-blue.png" : "/public/icon/chess_pawn-big-orange.png"
         } else {
             // Foods theme: chess pawns
-            return player === "player1" ? "/public/icon/chess_pawn-blue.png" : "/public/icon/chess_pawn-orange.png"
+            return player === "player1" ? "/public/icon/chess_pawn-big-blue.png" : "/public/icon/chess_pawn-big-orange.png"
         }
     }
 
@@ -106,11 +106,42 @@ function initGameplay() {
 
         // Bestimme den Gewinner
         const maxScore = Math.max(...scores)
+        const isDraw = scores.every(score => score === maxScore)
         const winnerIndex = scores.indexOf(maxScore)
         const winner = players[winnerIndex] ?? "player1"
         const winnerLabel = getPlayerLabel(winner)
 
-        // Game Over Score Overlay
+        // Wenn Draw: Zeige direkt Draw Modal ohne Game Over Overlay
+        if (isDraw) {
+            const drawIcon = selectedTheme === 'light' 
+                ? '/public/icon/icon_white-draw-vibe.png' 
+                : '/public/icon/icon_white-draw.png'
+            
+            const drawOverlay = document.createElement('div')
+            drawOverlay.className = 'draw-modal'
+            drawOverlay.innerHTML = `
+                <div class="draw-modal__content">
+                <p class="draw-modal__label orange">It's a</p>
+                    <p class="draw-modal__text">DRAW</p>
+                    <img src="${drawIcon}" alt="draw" class="draw-modal__image">
+                    <button id="backToStart" class="draw-modal__button">
+                        Back to start
+                    </button>
+                </div>
+            `
+            document.body.appendChild(drawOverlay)
+
+            // Back to Start Button Handler
+            const backBtn = document.getElementById('backToStart')
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    window.location.href = '/setting.html'
+                })
+            }
+            return
+        }
+
+        // Game Over Score Overlay (nur wenn kein Draw)
         const overlay = document.createElement('div')
         overlay.className = 'game-over'
         overlay.innerHTML = `
@@ -129,13 +160,13 @@ function initGameplay() {
         `
         document.body.appendChild(overlay)
 
-        // Winner Modal (separates Overlay)
+        // Winner Modal (nach 1500ms)
         setTimeout(() => {
             const winnerOverlay = document.createElement('div')
             winnerOverlay.className = 'winner-modal'
             winnerOverlay.innerHTML = `
                 <div class="winner-modal__content">
-                    <img src="/public/images/Confetti.png" alt="confetti" class="winner-modal__image">
+                    ${selectedTheme === 'light' ? '<img src="/public/images/Confetti.png" alt="confetti" class="winner-modal__image">' : ''}
                     <p class="winner-modal__label">The winner is</p>
                     <p class="winner-modal__text winner-modal__text--${winner}">
                         ${winnerLabel} Player
@@ -155,7 +186,7 @@ function initGameplay() {
                     window.location.href = '/setting.html'
                 })
             }
-        }, 1500)
+        }, 150000)
     }
 
     field.addEventListener("click", e => {
@@ -217,8 +248,35 @@ function initGameplay() {
         playerViewIcons[1].src = getPlayerIcon("player2")
     }
 
+    // Aktualisiere Exit Button Icon basierend auf Theme
+    const exitBtn = document.querySelector<HTMLButtonElement>(".exitGameBtn")
+    const exitBtnImg = exitBtn?.querySelector<HTMLImageElement>("img")
+    if (exitBtnImg) {
+        exitBtnImg.src = selectedTheme === 'light' 
+            ? '/public/icon/move_item.png' 
+            : '/public/icon/move_item-orange.png'
+    }
+
     // Für Testing: Game Over manuell aufrufen über window.forceGameOver()
     ;(window as any).forceGameOver = showGameOver
+
+    // Für Testing: Gewinner simulieren (unterschiedliche Scores)
+    ;(window as any).forceWinner = () => {
+        scores[0] = 5
+        scores[1] = 2
+        matchedPairs = 7
+        gameOver = true
+        showGameOver()
+    }
+
+    // Für Testing: Draw simulieren (gleiche Scores)
+    ;(window as any).forceDraw = () => {
+        scores[0] = 5
+        scores[1] = 5
+        matchedPairs = 10
+        gameOver = true
+        showGameOver()
+    }
 }
 
 function initThemeSelector() {
@@ -306,6 +364,14 @@ function renderField(count: number) {
     const images = selectedTheme === 'light' ? daImages : foodImages
     const imagePath = selectedTheme === 'light' ? '/card-img-da/' : '/card-img-food/'
     
+    // Setze Grid-Spalten je nach Kartenzahl
+    // 16 cards: 4x4, 24 cards: 6x4, 36 cards: 6x6
+    let cols = 4
+    if (count === 24) cols = 6
+    if (count === 36) cols = 6
+    
+    field.style.gridTemplateColumns = `repeat(${cols}, minmax(124px, 1fr))`
+    
     const pairs = count / 2
     const backs = images.slice(0, pairs)
     const deck = [...backs, ...backs].sort(() => Math.random() - 0.5)
@@ -324,6 +390,8 @@ document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="play
             this.checked = false
         }
         this.previousChecked = this.checked
+        // Triggere Validierung nach Abwählen
+        allradioCheked()
     })
 })
 allradioCheked()
