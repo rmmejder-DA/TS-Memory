@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TS-Memory</title>
-    <script type="module" crossorigin src="/TS-Memory/assets/play-C6wgKQ4-.js"></script>
-    <link rel="modulepreload" crossorigin href="/TS-Memory/assets/main-DkmOTNHx.js">
-    <link rel="stylesheet" crossorigin href="/TS-Memory/assets/main-BKOK8E0O.css">
 </head>
 
 <body>
@@ -21,10 +18,18 @@
             <p>Current player</p>
             <img id="player" src="/public/icon/chess_pawn-blue.png" alt="ches chess_pawn-blue">
         </div>
-        <button class="exitGameBtn">
+        <button id="exitGame" class="exitGameBtn">
             <img src="/public/icon/move_item.png" alt="exit">
             <p class="exitGameBtn__text">Exit game</p>
         </button>
+        <div id="exitPopup" class="popup">
+    <div class="popup-content">
+        <h2>Are you sure you want to quit the game?</h2>
+
+        <button id="backToGame">Back to game</button>
+        <button id="confirmExit">Exit Game</button>
+    </div>
+</div>
     </header>
     <div id="field" class="field-preview"></div>
     <script type="module" src="./src/main.ts"></script>

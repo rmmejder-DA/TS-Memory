@@ -12,7 +12,7 @@
 
 body {
     height: 100vh;
-
+    background-color: white;
     font-family: 'RedRose', sans-serif;
     overflow: hidden;
     display: flex;
@@ -23,9 +23,12 @@ body.theme-food * {
     font-family: 'Patrick Hand', sans-serif;
 }
 
+body.theme-code {
+    background-color: #303131;
+}
+
 body.theme-code * {
     font-family: 'RedRose', sans-serif;
-    background-color: #303131;
 }
 
 * {
@@ -189,6 +192,7 @@ body.theme-code * {
     align-items: center;
     height: 100vh;
     margin: 0 auto;
+    background-color: #303131;
 }
 
 .readyplay__hero-icon {
@@ -316,6 +320,61 @@ body.theme-food .card__face {
     width: 85px;
     cursor: pointer;
     border: none;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    text-align: center;
+    min-width: 270px;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+
+    & h2 {
+        font-size: 3rem;
+        color: #303131;
+        margin-bottom: 20px;
+    }
+
+    & #backToGame {
+        background-color: #66cfbc;
+        border: none;
+        color: white;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    & #confirmExit {
+        background-color: #66cfbc65;
+        border: 1px solid #66cfbc;
+        color: #66cfbc;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    & button {
+        margin: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1.75rem;
+        background-color: #66cfbc;
+        transform: scale(0.98);
+    }
 }
 
 .setting__preview {
@@ -612,6 +671,60 @@ body.theme-food .exitGameBtn {
     }
 }
 
+body.theme-food .popup {
+    background: transparent;
+}
+
+body.theme-food .popup-content {
+    background: white;
+    padding: 30px;
+    text-align: center;
+    min-width: 270px;
+    max-width: 560px;
+    border-radius: 20px;
+    width: 100%;
+    margin: 0 auto;
+
+    & h2 {
+        color: #ff9f1c;
+        margin-bottom: 20px;
+    }
+
+    & #backToGame {
+        background-color: #ff9f1c;
+        border: none;
+        color: white;
+
+        &:hover {
+            transform: scale(1.1);
+            background-color: #e68a00;
+        }
+    }
+
+    & #confirmExit {
+        background-color: transparent;
+        border: 2px solid #ff9f1c;
+        color: #ff9f1c;
+
+        &:hover {
+            transform: scale(1.1);
+            background-color: #f7e6d5;
+        }
+    }
+
+    & button {
+        margin: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1.75rem;
+        background-color: #ff9f1c;
+        color: white;
+        border-radius: 8px;
+        transform: scale(0.98);
+        transition: all 0.3s ease;
+    }
+}
+
 body.theme-code .exitGameBtn {
     background-color: #415652;
     color: white;
@@ -632,10 +745,6 @@ body.theme-code .exitGameBtn {
         object-position: center;
     }
 
-    &:active {
-        transform: scale(0.95);
-    }
-
     &:hover {
         background-color: #4dd5bc;
         color: #fff;
@@ -644,6 +753,17 @@ body.theme-code .exitGameBtn {
 
         & img {
             filter: brightness(0) invert(1);
+        }
+    }
+
+    &:active {
+        transform: scale(0.95);
+        background-color: #415652;
+        color: white;
+        box-shadow: none;
+
+        & img {
+            filter: none;
         }
     }
 }
@@ -711,7 +831,6 @@ body.theme-code .exitGameBtn {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 16px;
         padding: 0;
         margin: 0;
     }
@@ -733,13 +852,15 @@ body.theme-code .exitGameBtn {
     }
 
     &__item--player1 span {
-        color: #4dd5bc;
+        color: #097fc5;
         font-weight: bold;
+        font-size: 2.5rem;
     }
 
     &__item--player2 span {
-        color: #ff9f1c;
+        color: #f58e39;
         font-weight: bold;
+        font-size: 2.5rem;
     }
 }
 
@@ -767,7 +888,7 @@ body.theme-food .game-over {
     &__list {
         background-color: white;
         width: min-content;
-    
+
     }
 
     &__item {
@@ -804,6 +925,8 @@ body.theme-food .game-over {
         width: 100%;
         height: 30%;
         animation: bounce 1s ease-in-out infinite;
+        position: relative;
+        top: -100px;
     }
 
     &__label {
@@ -849,13 +972,14 @@ body.theme-food .game-over {
         transition: all 0.3s ease;
 
         &:hover {
-            background-color: #f0ea6e;
+            background-color: #4dd5bc;
             color: #303131;
             transform: scale(1.05);
         }
 
         &:active {
             transform: scale(0.98);
+            background-color: #91ddcf;
         }
     }
 }
@@ -885,7 +1009,7 @@ body.theme-food .game-over {
         justify-content: center;
         gap: 30px;
         width: 420px;
-        height: 600px;
+        height: auto;
     }
 
     &__image {
@@ -926,6 +1050,7 @@ body.theme-food .game-over {
 
         &:active {
             transform: scale(0.98);
+            background-color: #f7e6d5;
         }
     }
 }
@@ -949,14 +1074,14 @@ body.theme-food .draw-modal {
     }
 
     &__button {
-        background-color: #d4c7b9;
-        color: #333;
-        border: 1px solid #ff9f1c;
+        background-color: #ff9f1c;
+        color: white;
+        border-radius: 12px;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
 
-        &:hover {
-            background-color: #ff9f1c;
-            color: #fff;
-        }
+        &:active {}
     }
 }
 

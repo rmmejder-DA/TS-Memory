@@ -42,11 +42,6 @@ function initGameplay() {
             const parsed = JSON.parse(storedPlayers)
             if (Array.isArray(parsed) && parsed.length) {
                 players = parsed
-                // Wenn nur 1 Spieler ausgewählt, den zweiten hinzufügen
-                if (players.length === 1) {
-                    const other = players[0] === "player1" ? "player2" : "player1"
-                    players.push(other)
-                }
                 // Maximal 2 Spieler
                 players = players.slice(0, 2)
             }
@@ -77,9 +72,22 @@ function initGameplay() {
     }
 
     const updateScoresUI = () => {
-        scoreSpans.forEach((span, index) => {
+        // Re-query scoreSpans jedes Mal, da sich die DOM-Struktur ändern kann
+        const currentScoreSpans = Array.from(document.querySelectorAll<HTMLElement>("#playerview span"))
+        currentScoreSpans.forEach((span, index) => {
             span.textContent = String(scores[index] ?? 0)
         })
+    }
+
+    const updatePlayerViewUI = () => {
+        const playerView = document.getElementById("playerview")
+        if (!playerView) return
+
+        // Erstelle dynamisch die Spieler-Übersicht basierend auf der Anzahl der Spieler
+        playerView.innerHTML = players.map((player, index) => `
+            <img src="${getPlayerIcon(player)}" alt="player${index}">
+            <span id="counter">${scores[index] ?? 0}</span>
+        `).join("")
     }
 
     const updateCurrentPlayerUI = () => {
@@ -106,17 +114,17 @@ function initGameplay() {
 
         // Bestimme den Gewinner
         const maxScore = Math.max(...scores)
-        const isDraw = scores.every(score => score === maxScore)
+        const isDraw = players.length > 1 && scores.every(score => score === maxScore)
         const winnerIndex = scores.indexOf(maxScore)
         const winner = players[winnerIndex] ?? "player1"
         const winnerLabel = getPlayerLabel(winner)
 
         // Wenn Draw: Zeige direkt Draw Modal ohne Game Over Overlay
         if (isDraw) {
-            const drawIcon = selectedTheme === 'light' 
-                ? '/public/icon/icon_white-draw-vibe.png' 
+            const drawIcon = selectedTheme === 'light'
+                ? '/public/icon/icon_white-draw-vibe.png'
                 : '/public/icon/icon_white-draw.png'
-            
+
             const drawOverlay = document.createElement('div')
             drawOverlay.className = 'draw-modal'
             drawOverlay.innerHTML = `
@@ -125,7 +133,7 @@ function initGameplay() {
                     <p class="draw-modal__text">DRAW</p>
                     <img src="${drawIcon}" alt="draw" class="draw-modal__image">
                     <button id="backToStart" class="draw-modal__button">
-                        Back to start
+                        HOME
                     </button>
                 </div>
             `
@@ -176,8 +184,8 @@ function initGameplay() {
                     <button id="backToStart" class="winner-modal__button">
                         Back to start
                     </button>
-                </div>
-            `
+                </div>`
+
             document.body.appendChild(winnerOverlay)
 
             // Back to Start Button Handler
@@ -187,7 +195,7 @@ function initGameplay() {
                     window.location.href = '/setting.html'
                 })
             }
-        }, 150000)
+        }, 1500)
     }
 
     field.addEventListener("click", e => {
@@ -239,57 +247,70 @@ function initGameplay() {
         }, 900)
     })
 
+    updatePlayerViewUI()
     updateScoresUI()
     updateCurrentPlayerUI()
-
-    // Aktualisiere Header Icons basierend auf Theme
-    const playerViewIcons = document.querySelectorAll<HTMLImageElement>("#playerview img")
-    if (playerViewIcons.length >= 2) {
-        playerViewIcons[0].src = getPlayerIcon("player1")
-        playerViewIcons[1].src = getPlayerIcon("player2")
-    }
 
     // Aktualisiere Exit Button Icon basierend auf Theme
     const exitBtn = document.querySelector<HTMLButtonElement>(".exitGameBtn")
     const exitBtnImg = exitBtn?.querySelector<HTMLImageElement>("img")
     if (exitBtnImg) {
-        exitBtnImg.src = selectedTheme === 'light' 
-            ? '/public/icon/move_item.png' 
+        exitBtnImg.src = selectedTheme === 'light'
+            ? '/public/icon/move_item.png'
             : '/public/icon/move_item-orange.png'
     }
 
     // Für Testing: Game Over manuell aufrufen über window.forceGameOver()
-    ;(window as any).forceGameOver = showGameOver
+    ; (window as any).forceGameOver = showGameOver
 
-    // Für Testing: Gewinner simulieren (unterschiedliche Scores)
-    ;(window as any).forceWinner = () => {
-        scores[0] = 5
-        scores[1] = 2
-        matchedPairs = 7
-        gameOver = true
-        showGameOver()
-    }
+        // Für Testing: Gewinner simulieren (unterschiedliche Scores)
+        ; (window as any).forceWinner = () => {
+            scores[0] = 5
+            scores[1] = 2
+            matchedPairs = 7
+            gameOver = true
+            showGameOver()
+        }
 
-    // Für Testing: Draw simulieren (gleiche Scores)
-    ;(window as any).forceDraw = () => {
-        scores[0] = 5
-        scores[1] = 5
-        matchedPairs = 10
-        gameOver = true
-        showGameOver()
-    }
+        // Für Testing: Draw simulieren (direkt Draw-Modal anzeigen)
+        ; (window as any).forceDraw = () => {
+            const selectedTheme = localStorage.getItem('selectedTheme') ?? 'light'
+            const drawIcon = selectedTheme === 'light'
+                ? '/public/icon/icon_white-draw-vibe.png'
+                : '/public/icon/icon_white-draw.png'
+
+            const drawOverlay = document.createElement('div')
+            drawOverlay.className = 'draw-modal'
+            drawOverlay.innerHTML = `
+        <div class="draw-modal__content">
+            <p class="draw-modal__label orange">It's a</p>
+            <p class="draw-modal__text">DRAW</p>
+            <img src="${drawIcon}" alt="draw" class="draw-modal__image">
+            <button id="backToStart" class="draw-modal__button">
+                HOME
+            </button>
+        </div>`
+            document.body.appendChild(drawOverlay)
+
+            const backBtn = document.getElementById('backToStart')
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    window.location.href = '/setting.html'
+                })
+            }
+        }
 }
 
 function initThemeSelector() {
     const themePreview = document.getElementById("theme-preview") as HTMLImageElement | null
     const themeView = document.getElementById("themeview")
     const themeMap: Record<string, { src: string; label: string }> = { light: { src: "/images/da-style.png", label: "Code vibes theme" }, dark: { src: "/images/vibe-style.png", label: "Foods theme" } }
-    const applyTheme = (key: string) => { 
+    const applyTheme = (key: string) => {
         const theme = themeMap[key] ?? themeMap.light
-        if (themePreview) { 
+        if (themePreview) {
             themePreview.src = theme.src
             themePreview.alt = theme.label
-        } 
+        }
         if (themeView) themeView.textContent = theme.label
         // Speichere das Theme in localStorage
         localStorage.setItem('selectedTheme', key)
@@ -351,28 +372,28 @@ function initBoardSelector() {
 function renderField(count: number) {
     const field = document.getElementById('field')
     if (!field) return
-    
+
     // Hole das gespeicherte Theme, standardmäßig 'light' (Code vibes)
     const selectedTheme = localStorage.getItem('selectedTheme') ?? 'light'
-    
+
     // Code vibes theme Bilder (tatsächliche Dateien aus /public/card-img-da/)
     const daImages = ['angular.png', 'cmd.png', 'django.png', 'node.png', 'react.png', 'sass.png', 'vscode.png', 'visual.png', 'BB.png', 'blue-yellow.png', 'card1.png', 'Cards 5.png', 'Cards1.png', 'Cards2.png', 'card_front.png', 'Javascript Logo 1.png', 'Vector.png', 'Vector1.png']
-    
+
     // Foods theme Bilder
     const foodImages = ['pizza.png', 'burger.png', 'sushi.png', 'hotdog.png', 'fries.png', 'cake.png', 'ice.png', 'taco.png', 'sandwich.png', 'pudding.png', 'macaron.png', 'choclate.png', 'dessert.png', 'wrap.png', 'salad.png', 'brezel.png', 'wrap.png', 'brezel.png']
-    
+
     // Wähle die richtigen Bilder basierend auf dem Theme
     const images = selectedTheme === 'light' ? daImages : foodImages
     const imagePath = selectedTheme === 'light' ? '/card-img-da/' : '/card-img-food/'
-    
+
     // Setze Grid-Spalten je nach Kartenzahl
     // 16 cards: 4x4, 24 cards: 6x4, 36 cards: 6x6
     let cols = 4
     if (count === 24) cols = 6
     if (count === 36) cols = 6
-    
+
     field.style.gridTemplateColumns = `repeat(${cols}, minmax(124px, 1fr))`
-    
+
     const pairs = count / 2
     const backs = images.slice(0, pairs)
     const deck = [...backs, ...backs].sort(() => Math.random() - 0.5)
@@ -400,7 +421,7 @@ allradioCheked()
 function allradioCheked() {
     const readyBtn = document.getElementById('readyplay') as HTMLButtonElement | null;
     const imgs = Array.from(document.getElementsByClassName('startplay__button-icon')) as HTMLImageElement[];
-    
+
     if (!readyBtn) return;
 
     // Prüfe Radio-Buttons (Theme und Board)
@@ -415,7 +436,7 @@ function allradioCheked() {
     // Aktiviere Start-Button nur wenn alles ausgewählt ist
     const allSelected = radioSelected && playerSelected;
     readyBtn.disabled = !allSelected;
-    
+
     if (allSelected) {
         imgs.forEach(i => i.src = '/icon/smart_display.png');
     } else {
@@ -423,12 +444,31 @@ function allradioCheked() {
     }
 
     // Event Listener hinzufügen
-    radios.forEach(r => { 
-        r.removeEventListener('change', allradioCheked); 
-        r.addEventListener('change', allradioCheked); 
+    radios.forEach(r => {
+        r.removeEventListener('change', allradioCheked);
+        r.addEventListener('change', allradioCheked);
     });
     playerCheckboxes.forEach(c => {
         c.removeEventListener('change', allradioCheked);
         c.addEventListener('change', allradioCheked);
     });
 }
+    // Exit Game Popup Handler
+    const exitButton = document.getElementById("exitGame") as HTMLButtonElement
+    const popup = document.getElementById("exitPopup") as HTMLDivElement
+    const backButton = document.getElementById("backToGame") as HTMLButtonElement
+    const confirmButton = document.getElementById("confirmExit") as HTMLButtonElement
+
+    if (exitButton && popup && backButton && confirmButton) {
+        exitButton.addEventListener("click", () => {
+            popup.style.display = "flex"
+        })
+
+        backButton.addEventListener("click", () => {
+            popup.style.display = "none"
+        })
+
+        confirmButton.addEventListener("click", () => {
+            window.location.href = "index.html"
+        })
+    }
