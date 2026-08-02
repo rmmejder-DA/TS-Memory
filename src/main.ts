@@ -4,7 +4,10 @@ interface RadioWithPreviousChecked extends HTMLInputElement {
     previousChecked?: boolean
 }
 
-init()
+document.addEventListener('DOMContentLoaded', () => {
+    init()
+})
+
 function init() {
     initThemeSelector()
     initPlayerSelector()
@@ -64,10 +67,10 @@ function initGameplay() {
     const getPlayerIcon = (player: string) => {
         if (selectedTheme === 'light') {
             // Code vibes theme: code-blue.png und orange-player.png
-            return player === "player1" ? "/public/icon/chess_pawn-big-blue.png" : "/public/icon/chess_pawn-big-orange.png"
+            return player === "player1" ? "/icon/chess_pawn-big-blue.png" : "/icon/chess_pawn-big-orange.png"
         } else {
             // Foods theme: chess pawns
-            return player === "player1" ? "/public/icon/chess_pawn-big-blue.png" : "/public/icon/chess_pawn-big-orange.png"
+            return player === "player1" ? "/icon/chess_pawn-big-blue.png" : "/icon/chess_pawn-big-orange.png"
         }
     }
 
@@ -122,8 +125,8 @@ function initGameplay() {
         // Wenn Draw: Zeige direkt Draw Modal ohne Game Over Overlay
         if (isDraw) {
             const drawIcon = selectedTheme === 'light'
-                ? '/public/icon/icon_white-draw-vibe.png'
-                : '/public/icon/icon_white-draw.png'
+                ? '/icon/icon_white-draw-vibe.png'
+                : '/icon/icon_white-draw.png'
 
             const drawOverlay = document.createElement('div')
             drawOverlay.className = 'draw-modal'
@@ -256,8 +259,8 @@ function initGameplay() {
     const exitBtnImg = exitBtn?.querySelector<HTMLImageElement>("img")
     if (exitBtnImg) {
         exitBtnImg.src = selectedTheme === 'light'
-            ? '/public/icon/move_item.png'
-            : '/public/icon/move_item-orange.png'
+            ? '/icon/move_item.png'
+            : '/icon/move_item-orange.png'
     }
 
     // Für Testing: Game Over manuell aufrufen über window.forceGameOver()
@@ -276,8 +279,8 @@ function initGameplay() {
         ; (window as any).forceDraw = () => {
             const selectedTheme = localStorage.getItem('selectedTheme') ?? 'light'
             const drawIcon = selectedTheme === 'light'
-                ? '/public/icon/icon_white-draw-vibe.png'
-                : '/public/icon/icon_white-draw.png'
+                ? '/icon/icon_white-draw-vibe.png'
+                : '/icon/icon_white-draw.png'
 
             const drawOverlay = document.createElement('div')
             drawOverlay.className = 'draw-modal'
@@ -336,7 +339,7 @@ function initPlayerSelector() {
 
     const update = () => {
         const selected = Array.from(boxes).filter(r => r.checked)
-        preview.innerHTML = selected.map(r => `<img src="${r.value === 'player1' ? '/public/icon/chess_pawn-blue.png' : '/public/icon/chess_pawn-orange.png'}" alt="${r.value}">`).join("")
+        preview.innerHTML = selected.map(r => `<img src="${r.value === 'player1' ? '/icon/chess_pawn-blue.png' : '/icon/chess_pawn-orange.png'}" alt="${r.value}">`).join("")
         preview.style.display = selected.length ? "block" : "none"
         if (playerView) playerView.style.display = selected.length ? "none" : "inline"
 
@@ -440,7 +443,7 @@ function allradioCheked() {
     if (allSelected) {
         imgs.forEach(i => i.src = '/icon/smart_display.png');
     } else {
-        imgs.forEach(i => i.src = '/public/icon/smart_display-disabled.png');
+        imgs.forEach(i => i.src = '/icon/smart_display-disabled.png');
     }
 
     // Event Listener hinzufügen
