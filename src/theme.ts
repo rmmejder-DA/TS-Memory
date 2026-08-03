@@ -10,6 +10,16 @@ export function initThemeSelector() {
     const themeView = document.getElementById("themeview")
     if (!themePreview) return
 
+    const defaultPreviewSrc = themePreview.src
+    const defaultPreviewAlt = themePreview.alt
+
+    const clearTheme = () => {
+        themePreview.src = defaultPreviewSrc
+        themePreview.alt = defaultPreviewAlt
+        if (themeView) themeView.textContent = "Game theme"
+        localStorage.removeItem('selectedTheme')
+    }
+
     const applyTheme = (key: string) => {
         const theme = themeMap[key] ?? themeMap.light
         themePreview.src = theme.src
@@ -24,7 +34,11 @@ export function initThemeSelector() {
 
     const restore = () => {
         const checked = document.querySelector<HTMLInputElement>('input[name="theme"]:checked')
-        applyTheme(checked?.value ?? "light")
+        if (checked?.value) {
+            applyTheme(checked.value)
+            return
+        }
+        clearTheme()
     }
 
     document.querySelectorAll<HTMLInputElement>('input[name="theme"]').forEach(radio => {
