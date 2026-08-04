@@ -147,7 +147,7 @@ body.theme-food .exitGameBtn {
 }
 
 body.theme-food .popup {
-    background: transparent;
+    background: #ff9f1c73;
 }
 
 body.theme-food .popup-content {
@@ -159,6 +159,7 @@ body.theme-food .popup-content {
     border-radius: 20px;
     width: 100%;
     margin: 0 auto;
+    box-shadow: 0 0 20px 3px #ff9f1c;
 
     & h2 {
         color: #ff9f1c;

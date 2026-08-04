@@ -125,7 +125,7 @@ function showWinnerModal(state: GameState, winner: string) {
     const label = winner === "player1" ? "Blue" : winner === "player2" ? "Orange" : winner
     const div = document.createElement('div')
     div.className = 'winner-modal'
-    const conf = state.theme === 'light' ? '<img src="/public/images/Confetti.png" alt="confetti" class="winner-modal__image">' : ''
+    const conf = '<img src="/images/Confetti.png" class="confetti" alt="confetti">'
     div.innerHTML = `<div class="winner-modal__content">${conf}<p class="winner-modal__label">The winner is</p><p class="winner-modal__text winner-modal__text--${winner}">${label} Player</p><img src="${getPlayerIcon(winner, state.theme)}" alt="player icon" class="winner-modal__pawn winner-modal__pawn--${winner}"><button id="backToStart" class="winner-modal__button">Home</button></div>`
     document.body.appendChild(div)
     document.getElementById('backToStart')?.addEventListener('click', () => window.location.href = '/setting.html')
