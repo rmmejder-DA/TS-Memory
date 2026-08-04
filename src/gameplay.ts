@@ -103,7 +103,7 @@ function showDrawModal(state: GameState) {
     const icon = state.theme === 'light' ? '/icon/icon_white-draw-vibe.png' : '/icon/icon_white-draw.png'
     const div = document.createElement('div')
     div.className = 'draw-modal'
-    div.innerHTML = `<div class="draw-modal__content"><p class="draw-modal__label orange">It's a</p><p class="draw-modal__text">DRAW</p><img src="${icon}" alt="draw"><button id="backToStart" class="draw-modal__button">HOME</button></div>`
+    div.innerHTML = `<div class="draw-modal__content"><p class="draw-modal__label">It's a</p><p class="draw-modal__text">DRAW</p><img src="${icon}" alt="draw"><button id="backToStart" class="draw-modal__button">HOME</button></div>`
     document.body.appendChild(div)
     document.getElementById('backToStart')?.addEventListener('click', () => window.location.href = '/setting.html')
 }
@@ -126,7 +126,7 @@ function showWinnerModal(state: GameState, winner: string) {
     const div = document.createElement('div')
     div.className = 'winner-modal'
     const conf = state.theme === 'light' ? '<img src="/public/images/Confetti.png" alt="confetti" class="winner-modal__image">' : ''
-    div.innerHTML = `<div class="winner-modal__content">${conf}<p class="winner-modal__label">The winner is</p><p class="winner-modal__text winner-modal__text--${winner}">${label} Player</p><img src="${getPlayerIcon(winner, state.theme)}" alt="player icon" class="winner-modal__pawn winner-modal__pawn--${winner}"><button id="backToStart" class="winner-modal__button">Back to start</button></div>`
+    div.innerHTML = `<div class="winner-modal__content">${conf}<p class="winner-modal__label">The winner is</p><p class="winner-modal__text winner-modal__text--${winner}">${label} Player</p><img src="${getPlayerIcon(winner, state.theme)}" alt="player icon" class="winner-modal__pawn winner-modal__pawn--${winner}"><button id="backToStart" class="winner-modal__button">Home</button></div>`
     document.body.appendChild(div)
     document.getElementById('backToStart')?.addEventListener('click', () => window.location.href = '/setting.html')
 }
@@ -134,8 +134,8 @@ function showWinnerModal(state: GameState, winner: string) {
 function setupTestingFunctions(state: GameState) {
     (window as any).forceGameOver = () => showGameOver(state);
     (window as any).forceWinner = () => {
-        state.scores[0] = 5
-        state.scores[1] = 2
+        state.scores[0] = 2
+        state.scores[1] = 5
         showGameOver(state)
     }
 }

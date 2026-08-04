@@ -1,15 +1,12 @@
 // Form-Validierung
 
-import { RadioWithPreviousChecked } from './utils'
-
 export function initRadioToggle() {
-    document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])').forEach(radio => {
-        radio.addEventListener('click', function (this: HTMLInputElement & { previousChecked?: boolean }) {
-            if (this.previousChecked) this.checked = false
-            this.previousChecked = this.checked
-            validateForm()
-        })
-    })
+    const radios = document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])')
+    const players = document.querySelectorAll<HTMLInputElement>('input[name="player"]')
+
+    radios.forEach(radio => radio.addEventListener('change', validateForm))
+    players.forEach(player => player.addEventListener('change', validateForm))
+
     validateForm()
 }
 
@@ -26,12 +23,5 @@ export function validateForm() {
     readyBtn.disabled = !allOk
     Array.from(document.getElementsByClassName('startplay__button-icon')).forEach((img: any) => {
         img.src = allOk ? '/icon/smart_display.png' : '/icon/smart_display-disabled.png'
-    })
-
-    radios.forEach(r => r.removeEventListener('change', validateForm))
-    radios.forEach(r => r.addEventListener('change', validateForm))
-    document.querySelectorAll<HTMLInputElement>('input[name="player"]').forEach(c => {
-        c.removeEventListener('change', validateForm)
-        c.addEventListener('change', validateForm)
     })
 }
