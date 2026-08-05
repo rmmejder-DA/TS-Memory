@@ -24,16 +24,17 @@
 
     &--line {
         position: relative;
-        width: 200px;
+        left: -16px;
+        top: -9px;
         height: 4px;
         background-color: #f0ea6e;
-        width: 100%;
+        width: 73%;
         margin-top: 8px;
 
         &::after {
             content: '';
             position: absolute;
-            right: 0;
+            left: 0;
             top: -6px;
             width: 15px;
             height: 15px;

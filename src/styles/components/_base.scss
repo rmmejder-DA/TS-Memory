@@ -44,7 +44,7 @@ body.theme-code * {
 
 .main-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     height: 100vh;
     width: 100%;
     max-width: 1440px;
@@ -62,7 +62,7 @@ body.theme-code * {
 
     & span {
         color: black;
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         text-align: center;
     }
 
@@ -75,8 +75,8 @@ body.theme-code * {
 .player-radio {
     appearance: none;
     -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border: 2px solid #000;
     border-radius: 50%;
     background-color: #fff;
@@ -85,15 +85,15 @@ body.theme-code * {
 }
 
 .player-radio:checked {
-    background-color: #000;
+    background-color: #fff;
 }
 
 .player-radio:checked::after {
     content: "";
     position: absolute;
-    inset: 4px;
+    inset: 5px;
     border-radius: 50%;
-    background-color: #f0ea6e;
+    background-color: #060606;
 }
 
 .player-preview {
@@ -142,6 +142,7 @@ body.theme-code * {
         font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
+    font-family: 'RedRose';
     }
 }
 
@@ -170,8 +171,12 @@ body.theme-code * {
         transform: rotate(-30deg);
     }
 
-    &:hover .readyplay__button-arrow {
-        transform: scale(1.25);
+    &:hover .readyplay__button-arrow--small {
+        display: none;
+    }
+
+    &:hover .readyplay__button-arrow--large {
+        display: block;
     }
 
     &-icon {
@@ -190,6 +195,15 @@ body.theme-code * {
     &-arrow {
         font-size: 2rem;
         font-weight: bold;
+    }
+
+    &-arrow--small {
+        display: flex;
+    }
+
+    &-arrow--large {
+        display: none;
+        transform: scale(1.25);
     }
 }
 
@@ -254,6 +268,7 @@ body.theme-code * {
 
         &--back {
             transform: rotateY(180deg);
+            backface-visibility: hidden;
         }
 
         &--back img {
@@ -286,6 +301,8 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
     flex-direction: column;
     justify-content: center;
     gap: 70px;
+    max-width: 400px;
+    width: 100%;
 }
 
 .setting__right--content {
@@ -294,6 +311,8 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
     justify-content: center;
     align-items: end;
     gap: 50px;
+    position: relative;
+    top: 50px;
 }
 
 .exit__button {
@@ -389,6 +408,7 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
         align-items: center;
         gap: 10px;
         cursor: pointer;
+        position: relative;
     }
 
     &__player,
@@ -398,69 +418,72 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
         align-items: center;
         gap: 10px;
         font-size: 1.25rem;
+        padding-left: 36px;
     }
 
-    input[type="radio"],
-    input[type="checkbox"] {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 16px;
-        height: 16px;
-        border: 2px solid #000;
-        background-color: #fff;
-        cursor: pointer;
-        position: relative;
-        flex-shrink: 0;
-    }
-
-    input[type="radio"] {
-        border-radius: 50%;
-    }
-
-    input[type="radio"]:checked,
-    input[type="checkbox"]:checked {
-        background-color: #000;
-    }
-
-    input[type="radio"]:checked::after,
-    input[type="checkbox"]:checked::after {
-        content: '';
-        position: absolute;
-        inset: 1px;
-        background-color: #f0ea6e;
-    }
-
-    input[type="radio"]:checked::after {
-        border-radius: 50%;
-    }
-
-    input[type="radio"]:checked+label,
-    input[type="checkbox"]:checked+label {
+    &__theme label:hover {
         font-weight: bold;
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
 
-    input[type="radio"]:checked+label::before,
-    input[type="checkbox"]:checked+label::before {
-        content: '';
-        width: 10px;
-        height: 10px;
-        right: -5px;
-        position: absolute;
-        background-color: #f0ea6e;
-        transform: rotate(45deg);
-        flex-shrink: 0;
-    }
+        &::before {
+            content: "";
+            background-color: #f0ea6e;
+            flex-shrink: 0;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            right: -5px;
+            transform: rotate(45deg);
+        }
 
-    input[type="radio"]:checked+label::after,
-    input[type="checkbox"]:checked+label::after {
-        content: '';
-        width: 24px;
-        height: 3px;
-        background-color: #f0ea6e;
-        flex-shrink: 0;
+        &::after {
+            content: "";
+            background-color: #f0ea6e;
+            flex-shrink: 0;
+            width: 48px;
+            height: 4px;
+        }
+
     }
+}
+
+.game__themes input[type=radio]:checked+label,
+.game__themes input[type=checkbox]:checked+label,
+.game__players input[type=radio]:checked+label,
+.game__players input[type=checkbox]:checked+label,
+.game__board input[type=radio]:checked+label,
+.game__board input[type=checkbox]:checked+label {
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    display: inline-flex;
+    position: relative;
+}
+
+.game__themes input[type=radio]:checked+label:before,
+.game__themes input[type=checkbox]:checked+label:before,
+.game__players input[type=radio]:checked+label:before,
+.game__players input[type=checkbox]:checked+label:before,
+.game__board input[type=radio]:checked+label:before,
+.game__board input[type=checkbox]:checked+label:before {
+    content: "";
+    background-color: #f0ea6e;
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: -5px;
+    transform: rotate(45deg);
+}
+
+.game__themes input[type=radio]:checked+label:after,
+.game__themes input[type=checkbox]:checked+label:after,
+.game__players input[type=radio]:checked+label:after,
+.game__players input[type=checkbox]:checked+label:after,
+.game__board input[type=radio]:checked+label:after,
+.game__board input[type=checkbox]:checked+label:after {
+    content: "";
+    background-color: #f0ea6e;
+    flex-shrink: 0;
+    width: 48px;
+    height: 4px;
 }

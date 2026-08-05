@@ -170,7 +170,7 @@ body.theme-food .game-over {
 
     &__button {
         padding: 12px 32px;
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         background-color: #415652;
         color: white;
         border: 1px solid #4dd5bc;
@@ -339,16 +339,30 @@ body.theme-food .winner-modal {
 }
 
 @media (min-width: 1921px) {
+    #themeview {
+        min-width: 274px;
+    }
+
+    .startplay__wrapper #playerview {
+        width: 100px !important;
+        text-align: center;
+    }
+
+    .player-preview {
+        width: 100px;
+    }
+
     .startplay__wrapper span {
         font-size: 2rem;
     }
 
     .setting__right--content {
-        gap: 100px;
+        top: 110px;
     }
 
     .themes-img {
-        width: 660px;
+        width: 560px;
+        height: 460px;
     }
 
     .setting__left--content {
@@ -357,18 +371,21 @@ body.theme-food .winner-modal {
 
     .setting__title {
         font-size: 5rem;
+        &--line {
+            width: 91%;
+        }
     }
 
     .game__themes b,
     .game__players b,
     .game__board b {
-        font-size: 2.5rem;
+        font-size: 1.75rem;
     }
 
     .game__themes label,
     .game__players label,
     .game__board label {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 
     .winner-modal {

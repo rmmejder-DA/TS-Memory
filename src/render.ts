@@ -7,10 +7,10 @@ export function renderField(count: number) {
     if (!field) return
 
     const theme = getStoredTheme()
-    const daImages = ['angular.png', 'cmd.png', 'django.png', 'node.png', 'react.png', 'sass.png', 'vscode.png', 'visual.png', 'BB.png', 'blue-yellow.png', 'card1.png', 'Cards 5.png', 'Cards1.png', 'Cards2.png', 'card_front.png', 'Javascript Logo 1.png', 'Vector.png', 'Vector1.png']
+    const daImages = ['angular.png', 'cmd.png', 'django.png', 'node.png', 'react.png', 'sass.png', 'vscode.png', 'visual.png', 'BB.png', 'blue-yellow.png', 'card1.png', 'Cards 5.png', 'Cards1.png', 'Cards2.png', 'card_front1.png', 'Javascript Logo 1.png', 'Vector.png', 'Vector1.png']
     const foodImages = ['pizza.png', 'burger.png', 'sushi.png', 'hotdog.png', 'fries.png', 'cake.png', 'ice.png', 'taco.png', 'sandwich.png', 'pudding.png', 'macaron.png', 'choclate.png', 'dessert.png', 'wrap.png', 'salad.png', 'brezel.png', 'wrap.png', 'brezel.png']
     const images = theme === 'light' ? daImages : foodImages
-    const imagePath = theme === 'light' ? '/card-img-da/' : '/card-img-food/'
+    const imagePath = theme === 'light' ? '/public/card-img-da/' : '/public/card-img-food/'
 
     let cols = count === 24 ? 6 : count === 36 ? 6 : 4
     field.style.gridTemplateColumns = `repeat(${cols}, minmax(124px, 1fr))`
