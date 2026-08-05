@@ -56,7 +56,7 @@ function updateCurrentPlayerUI(state: GameState) {
 
 function updateExitButtonIcon(state: GameState) {
     const img = document.querySelector<HTMLImageElement>(".exitGameBtn img")
-    if (img) img.src = state.theme === 'light' ? '/public/icon/move_item.svg' : '/public/icon/move_item-orange.svg'
+    if (img) img.src = state.theme === 'light' ? '/icon/move_item.svg' : '/icon/move_item-orange.svg'
 }
 
 function setupCardClickListener(field: HTMLElement, state: GameState) {
