@@ -8,6 +8,7 @@ export class GameState {
     lockBoard = false
     gameOver = false
     scores: number[] = []
+    title: string[] = []
     matchedPairs = 0
     totalPairs = 0
     theme = ''

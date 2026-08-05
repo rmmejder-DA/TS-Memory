@@ -63,6 +63,7 @@ body.theme-code * {
     & span {
         color: black;
         font-size: 1.5rem;
+        text-align: center;
     }
 
     & #playerview {
@@ -109,12 +110,8 @@ body.theme-code * {
     object-fit: contain;
 }
 
-.player-preview img.blue {
-    filter: sepia(1) hue-rotate(90deg) saturate(800%);
-}
-
-.player-preview img.orange {
-    filter: sepia(1) hue-rotate(0deg) saturate(800%);
+.startplay__button:hover .startplay__button-icon {
+    transform: rotate(-10deg);
 }
 
 .startplay__button {
@@ -268,6 +265,7 @@ body.theme-code * {
 
     &.is-flipped .card__inner {
         transform: rotateY(180deg);
+        transition: all 750ms;
     }
 }
 
@@ -365,9 +363,9 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
 }
 
 .themes-img {
-    width: 560px;
-    max-width: 100%;
-    object-fit: contain;
+    width: 460px;
+    height: 412px;
+    border-radius: 18px;
 }
 
 .game__themes,
@@ -436,8 +434,8 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
         border-radius: 50%;
     }
 
-    input[type="radio"]:checked + label,
-    input[type="checkbox"]:checked + label {
+    input[type="radio"]:checked+label,
+    input[type="checkbox"]:checked+label {
         font-weight: bold;
         position: relative;
         display: inline-flex;
@@ -445,8 +443,8 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
         gap: 8px;
     }
 
-    input[type="radio"]:checked + label::before,
-    input[type="checkbox"]:checked + label::before {
+    input[type="radio"]:checked+label::before,
+    input[type="checkbox"]:checked+label::before {
         content: '';
         width: 10px;
         height: 10px;
@@ -457,8 +455,8 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
         flex-shrink: 0;
     }
 
-    input[type="radio"]:checked + label::after,
-    input[type="checkbox"]:checked + label::after {
+    input[type="radio"]:checked+label::after,
+    input[type="checkbox"]:checked+label::after {
         content: '';
         width: 24px;
         height: 3px;

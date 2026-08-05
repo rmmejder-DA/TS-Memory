@@ -21,26 +21,42 @@ function setupUIUpdates(state: GameState) {
 }
 
 function updateScoresUI(state: GameState) {
-    Array.from(document.querySelectorAll<HTMLElement>("#playerview span"))
+    Array.from(document.querySelectorAll<HTMLElement>("#playerview #counter"))
         .forEach((span, i) => span.textContent = String(state.scores[i] ?? 0))
 }
 
 function updatePlayerViewUI(state: GameState) {
     const playerView = document.getElementById("playerview")
     if (!playerView) return
+    const isCodeTheme = state.theme === 'light'
     playerView.innerHTML = state.players
-        .map((p, i) => `<img src="${getPlayerIcon(p, state.theme)}" alt="player${i}"><span id="counter">${state.scores[i] ?? 0}</span>`)
+        .map((p, i) => {
+            const label = p === 'player1' ? 'Blue' : 'Orange'
+            const counterClass = p === 'player1' ? 'player1' : 'player2'
+            const labelMarkup = isCodeTheme ? `<span class="${counterClass}">${label}</span>` : ''
+            return `<img src="${getPlayerIcon(p, state.theme)}" alt="player${i}">${labelMarkup}<span id="counter" class="${counterClass}">${state.scores[i] ?? 0}</span>`
+        })
         .join("")
 }
 
 function updateCurrentPlayerUI(state: GameState) {
     const img = document.getElementById("player") as HTMLImageElement | null
-    if (img) img.src = getPlayerIcon(state.players[state.currentPlayerIndex], state.theme)
+    if (img) {
+        if (state.theme === 'dark') {
+            img.src = '/icon/chess_pawn-transparent.svg'
+            img.classList.remove('player-current--blue', 'player-current--orange')
+            const currentPlayer = state.players[state.currentPlayerIndex]
+            img.classList.add(currentPlayer === 'player1' ? 'player-current--blue' : 'player-current--orange')
+        } else {
+            img.src = getPlayerIcon(state.players[state.currentPlayerIndex], state.theme)
+            img.classList.remove('player-current--blue', 'player-current--orange')
+        }
+    }
 }
 
 function updateExitButtonIcon(state: GameState) {
     const img = document.querySelector<HTMLImageElement>(".exitGameBtn img")
-    if (img) img.src = state.theme === 'light' ? '/icon/move_item.png' : '/icon/move_item-orange.png'
+    if (img) img.src = state.theme === 'light' ? 'public/icon/move_item.svg' : '/icon/move_item-orange.svg'
 }
 
 function setupCardClickListener(field: HTMLElement, state: GameState) {
@@ -77,7 +93,9 @@ function handleMatch(first: HTMLButtonElement, second: HTMLButtonElement, state:
     state.resetCards()
     if (state.isWin()) {
         state.gameOver = true
-        showGameOver(state)
+        window.setTimeout(() => {
+            showGameOver(state)
+        }, 3000)
     }
 }
 
@@ -100,7 +118,7 @@ function showGameOver(state: GameState) {
 }
 
 function showDrawModal(state: GameState) {
-    const icon = state.theme === 'light' ? '/icon/icon_white-draw-vibe.png' : '/icon/icon_white-draw.png'
+    const icon = state.theme === 'light' ? '/icon/icon_white-draw.svg' : '/icon/icon_white-draw-vibe.svg'
     const div = document.createElement('div')
     div.className = 'draw-modal'
     div.innerHTML = `<div class="draw-modal__content"><p class="draw-modal__label">It's a</p><p class="draw-modal__text">DRAW</p><img src="${icon}" alt="draw"><button id="backToStart" class="draw-modal__button">HOME</button></div>`
@@ -122,11 +140,15 @@ function renderGameOverItem(player: string, score: number, theme: string) {
 }
 
 function showWinnerModal(state: GameState, winner: string) {
-    const label = winner === "player1" ? "Blue" : winner === "player2" ? "Orange" : winner
+    const safeWinner = winner === 'player1' || winner === 'player2' ? winner : 'player1'
+    const label = safeWinner === 'player1' ? 'Blue' : 'Orange'
     const div = document.createElement('div')
     div.className = 'winner-modal'
     const conf = '<img src="/images/Confetti.png" class="confetti" alt="confetti">'
-    div.innerHTML = `<div class="winner-modal__content">${conf}<p class="winner-modal__label">The winner is</p><p class="winner-modal__text winner-modal__text--${winner}">${label} Player</p><img src="${getPlayerIcon(winner, state.theme)}" alt="player icon" class="winner-modal__pawn winner-modal__pawn--${winner}"><button id="backToStart" class="winner-modal__button">Home</button></div>`
+    const winnerIcon = state.theme === 'light'
+        ? (safeWinner === 'player1' ? '/icon/chess_pawn-big-blue.svg' : '/icon/chess_pawn-big-orange.svg')
+        : getPlayerIcon(safeWinner, state.theme)
+    div.innerHTML = `<div class="winner-modal__content">${conf}<p class="winner-modal__label">The winner is</p><p class="winner-modal__text winner-modal__text--${safeWinner}">${label} Player</p><img src="${winnerIcon}" alt="player icon" class="winner-modal__pawn winner-modal__pawn--${safeWinner}"><button id="backToStart" class="winner-modal__button">Home</button></div>`
     document.body.appendChild(div)
     document.getElementById('backToStart')?.addEventListener('click', () => window.location.href = '/setting.html')
 }

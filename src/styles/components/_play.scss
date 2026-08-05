@@ -17,21 +17,11 @@
         align-items: center;
         gap: 10px;
         background-color: #415652;
-        padding: 10px 30px;
+        padding: 10px 20px;
 
         & #counter {
             width: 36px;
             text-align: center;
-        }
-
-        & #counter:nth-child(2) {
-            color: #097fc5;
-            font-size: 2.75rem;
-        }
-
-        & #counter:nth-child(4) {
-            color: #f58e39;
-            font-size: 2.75rem;
         }
     }
 
@@ -56,8 +46,57 @@
             width: 24px;
             height: 30px;
             object-fit: contain;
+            margin-top: 6px;
         }
     }
+}
+
+body.theme-code .player1 {
+    color: #2bb1ff;
+    font-size: 1.75rem;
+}
+
+body.theme-code .player2 {
+    color: #f58e39;
+    font-size: 1.75rem;
+}
+
+body.theme-food .player-current--blue {
+    background-color: #2bb1ff;
+    padding: 6px;
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+body.theme-food .player-current--orange {
+    background-color: #f58e39;
+    padding: 6px;
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+body.theme-food .player1 {
+    color: #097fc5;
+    font-size: 2.25rem;
+    font-weight: bolder;
+}
+
+body.theme-food .player2 {
+    color: #ea6900;
+    font-size: 2.25rem;
+    font-weight: bolder;
+}
+
+.player-icon--blue {
+    background-color: blue;
+}
+
+.player-icon--orange {
+    background-color: orange;
 }
 
 .exitGame {
@@ -99,13 +138,13 @@ body.theme-food .play__header {
 }
 
 body.theme-food .play__header__currentPlayer {
-    color: #ff9f1c;
+    color: #a45212;
     font-size: 2rem;
 }
 
 body.theme-food .exitGameBtn {
     background-color: #fff9f2;
-    color: #ff9f1c;
+    color: #f3832d;
     display: flex;
     align-items: center;
     gap: 20px;

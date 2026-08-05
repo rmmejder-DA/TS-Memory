@@ -20,9 +20,10 @@ export const getPlayerLabel = (value: string) =>
     value === "player1" ? "Blue" : value === "player2" ? "Orange" : value
 
 export const getPlayerIcon = (player: string, theme: string) => {
-    const blue = "/icon/chess_pawn-big-blue.png"
-    const orange = "/icon/chess_pawn-big-orange.png"
-    return player === "player1" ? blue : orange
+    const isCodeTheme = theme === 'light'
+    const blue = isCodeTheme ? '/icon/label-blue.svg' : '/icon/chess_pawn-blue.svg'
+    const orange = isCodeTheme ? '/icon/label-orange.svg' : '/icon/chess_pawn-orange.svg'
+    return player === 'player1' ? blue : orange
 }
 
 export const setBodyTheme = (theme: string) => {

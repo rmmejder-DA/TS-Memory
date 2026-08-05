@@ -22,6 +22,6 @@ export function validateForm() {
 
     readyBtn.disabled = !allOk
     Array.from(document.getElementsByClassName('startplay__button-icon')).forEach((img: any) => {
-        img.src = allOk ? '/icon/smart_display.png' : '/icon/smart_display-disabled.png'
+        img.src = allOk ? '/icon/smart_display.svg' : '/icon/smart_display-disabled.svg'
     })
 }

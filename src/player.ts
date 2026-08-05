@@ -9,11 +9,13 @@ export function initPlayerSelector() {
     const update = () => {
         const selected = Array.from(boxes).filter(r => r.checked)
         const html = selected.map(r => {
-            const src = r.value === 'player1' ? '/icon/chess_pawn-blue.png' : '/icon/chess_pawn-orange.png'
+            const src = r.value === 'player1' ? '/icon/chess_pawn-blue.svg' : '/icon/chess_pawn-orange.svg'
             return `<img src="${src}" alt="${r.value}">`
         }).join("")
         preview.innerHTML = html
-        preview.style.display = selected.length ? "block" : "none"
+        preview.style.display = selected.length ? "flex" : "none"
+        preview.style.justifyContent = selected.length === 1 ? "center" : "flex-start"
+        preview.style.alignItems = "center"
         if (playerView) playerView.style.display = selected.length ? "none" : "inline"
         const json = selected.length ? JSON.stringify(selected.map(r => r.value)) : null
         if (json) localStorage.setItem("selectedPlayers", json)
