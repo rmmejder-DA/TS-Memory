@@ -136,7 +136,9 @@ function showGameOverModal(state: GameState, winner: string) {
 }
 
 function renderGameOverItem(player: string, score: number, theme: string) {
-    return `<li class="game-over__item game-over__item--${player}"><img src="${getPlayerIcon(player, theme)}" alt="${player}" class="game-over__item__icon"><span>${score}</span></li>`
+    const label = player === 'player1' ? 'Blue' : 'Orange'
+    const labelMarkup = theme === 'light' ? `<span class="${player}">${label}</span>` : ''
+    return `<li class="game-over__item game-over__item--${player}"><img src="${getPlayerIcon(player, theme)}" alt="${player}" class="game-over__item__icon">${labelMarkup}<span>${score}</span></li>`
 }
 
 function showWinnerModal(state: GameState, winner: string) {

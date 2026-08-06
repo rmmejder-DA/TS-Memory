@@ -59,15 +59,15 @@
     }
 
     &__item--player1 span {
-        color: #097fc5;
+        color: #2bb1ff;
         font-weight: bold;
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
     &__item--player2 span {
-        color: #ea6900;
+        color: #f58e39;
         font-weight: bold;
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 }
 
@@ -100,6 +100,14 @@ body.theme-food .game-over {
     &__item {
         background-color: #f0e5d9;
         color: #333;
+    }
+
+    &__item--player1 span {
+        color: #097fc5;
+    }
+
+    &__item--player2 span {
+        color: #ea6900;
     }
 }
 
@@ -290,8 +298,6 @@ body.theme-food .draw-modal {
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
-
-        &:active {}
     }
 }
 

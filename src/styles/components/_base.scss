@@ -248,6 +248,7 @@ body.theme-code * {
     aspect-ratio: 1/1;
     background-color: transparent;
     border: none;
+    perspective: 1000px;
 
     &__inner {
         width: 97%;
@@ -264,17 +265,24 @@ body.theme-code * {
         backface-visibility: hidden;
         width: 120px;
         height: 120px;
-        border-radius: 2px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &--back {
             transform: rotateY(180deg);
+            background-image: none !important;
+            background-color: white;
             backface-visibility: hidden;
         }
 
         &--back img {
             width: 120px;
             height: 120px;
-            border-radius: 2px;
+            border-radius: 8px;
+            object-fit: cover;
+            backface-visibility: hidden;
         }
     }
 
@@ -290,6 +298,7 @@ body.theme-food .card__face {
 
 .card[data-matched="true"] .card__face--back img {
     border: 2px solid #4dd5bc;
+    border-radius: 8px;
 }
 
 body.theme-food .card[data-matched="true"] .card__face--back img {
