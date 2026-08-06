@@ -1,70 +1,105 @@
-// Theme-Management
+interface Theme {
+    label: string;
+    src: string;
+}
 
-const themeMap: Record<string, { src: string; label: string }> = {
-    light: { src: "/images/da-style.png", label: "Code vibes theme" },
-    dark: { src: "/images/vibe-style.png", label: "Foods theme" }
+const globalThemeMap: Record<string, Theme> = {
+    light: { label: 'Code vibes theme', src: 'public/images/da-style.png' },
+    dark: { label: 'Foods theme', src: 'public/images/vibe-style.png' }
+};
+
+/**
+ * Updates image preview attributes and stores the selected key.
+ */
+function updateThemePreview(preview: HTMLImageElement, key: string, view: HTMLElement | null, src: string, alt: string): void {
+    if (!src) return;
+    preview.src = src;
+    preview.alt = alt;
+    if (view) view.textContent = alt;
+    localStorage.setItem('selectedTheme', key);
 }
 
 /**
- * Updates the theme preview and localStorage.
- * @param preview - The preview image element
- * @param key - The theme key
- * @param view - The display label element
- * @param src - The image source path
- * @param alt - The alternative text
+ * Helper to fetch the currently active theme from the DOM.
  */
-function updateThemePreview(preview: HTMLImageElement, key: string, view: HTMLElement | null, src: string, alt: string) {
-    preview.src = src
-    preview.alt = alt
-    if (view) view.textContent = alt
-    localStorage.setItem('selectedTheme', key)
+function getActiveTheme(): Theme | null {
+    const checked = document.querySelector<HTMLInputElement>('input[name="theme"]:checked');
+    return checked?.value ? globalThemeMap[checked.value] : null;
 }
 
 /**
- * Sets up event listeners for a theme radio button.
- * @param radio - The radio input element
- * @param preview - The preview image element
- * @param view - The display label element
- * @param defaultSrc - Default image source
- * @param defaultAlt - Default alternative text
+ * Resets the preview elements back to the active theme or default fallbacks.
  */
-function setupThemeRadio(radio: HTMLInputElement, preview: HTMLImageElement, view: HTMLElement | null, defaultSrc: string, defaultAlt: string) {
-    const restore = () => {
-        const checked = document.querySelector<HTMLInputElement>('input[name="theme"]:checked')
-        if (checked?.value) {
-            const theme = themeMap[checked.value] ?? themeMap.light
-            preview.src = theme.src
-            preview.alt = theme.label
-            if (view) view.textContent = theme.label}
+function restorePreview(preview: HTMLImageElement, defaultSrc: string, defaultAlt: string): void {
+    const theme = getActiveTheme();
+    preview.src = theme?.src || defaultSrc;
+    preview.alt = theme?.label || defaultAlt;
+}
+
+/**
+ * Binds mouse hover interactions to a target element for theme previews.
+ */
+function bindHover(element: HTMLElement | null, radio: HTMLInputElement, preview: HTMLImageElement, restore: () => void): void {
+    element?.addEventListener("mouseenter", () => {
+        const theme = globalThemeMap[radio.value];
+        if (theme?.src) preview.src = theme.src;
+    });
+    element?.addEventListener("mouseleave", restore);
+}
+
+/**
+ * Registers change and mouse event listeners for a specific radio element.
+ */
+function setupThemeRadio(radio: HTMLInputElement, preview: HTMLImageElement, view: HTMLElement | null, defaultSrc: string, defaultAlt: string): void {
+    const restore = () => restorePreview(preview, defaultSrc, defaultAlt);
+    
+    radio.addEventListener("change", () => {
+        if (radio.checked) {
+            const theme = globalThemeMap[radio.value];
+            updateThemePreview(preview, radio.value, view, theme?.src || defaultSrc, theme?.label || 'Custom');
+        }
+    });
+
+    bindHover(radio, radio, preview, restore);
+    bindHover(document.querySelector<HTMLLabelElement>(`label[for="${radio.id}"]`), radio, preview, restore);
+}
+
+/**
+ * Restores the theme state from local storage configuration.
+ */
+function loadStoredTheme(preview: HTMLImageElement | null, defaultSrc: string, defaultAlt: string, view: HTMLElement | null): void {
+    const stored = localStorage.getItem('selectedTheme') || 'light';
+    let radio = document.querySelector<HTMLInputElement>(`input[name="theme"][value="${stored}"]`);
+    
+    if (!radio) {
+        localStorage.setItem('selectedTheme', 'light');
+        radio = document.querySelector<HTMLInputElement>(`input[name="theme"][value="light"]`);
     }
-    radio.addEventListener("change", () => radio.checked && updateThemePreview(preview, radio.value, view, themeMap[radio.value]?.src ?? themeMap.light.src, themeMap[radio.value]?.label ?? themeMap.light.label))
-    radio.addEventListener("mouseenter", () => preview.src = themeMap[radio.value]?.src ?? themeMap.light.src)
-    radio.addEventListener("mouseleave", restore)
-    const label = document.querySelector<HTMLLabelElement>(`label[for="${radio.id}"]`)
-    label?.addEventListener("mouseenter", () => preview.src = themeMap[radio.value]?.src ?? themeMap.light.src)
-    label?.addEventListener("mouseleave", restore)
+
+    if (radio) {
+        radio.checked = true;
+        const current = globalThemeMap[radio.value];
+        if (preview) {
+            preview.src = current?.src || defaultSrc;
+            preview.alt = current?.label || defaultAlt;
+        }
+    }
+    if (view) view.textContent = 'Game theme';
 }
 
 /**
- * Loads and selects the stored theme from localStorage.
+ * Initializes listeners and state for the core theme selector.
  */
-function loadStoredTheme() {
-    const storedTheme = localStorage.getItem('selectedTheme') || 'light'
-    const themeRadio = document.querySelector<HTMLInputElement>(`input[name="theme"][value="${storedTheme}"]`)
-    if (themeRadio) themeRadio.checked = true
-}
+export function initThemeSelector(): void {
+    const preview = document.getElementById("theme-preview") as HTMLImageElement | null;
+    const view = document.getElementById("themeview");
+    if (!preview) return;
 
-/**
- * Initializes the theme selector with preview and event listeners.
- */
-export function initThemeSelector() {
-    const themePreview = document.getElementById("theme-preview") as HTMLImageElement | null
-    const themeView = document.getElementById("themeview")
-    if (!themePreview) return
-    loadStoredTheme()
-    const radios = document.querySelectorAll<HTMLInputElement>('input[name="theme"]')
-    const defaultSrc = themePreview.src, defaultAlt = themePreview.alt
-    radios.forEach(radio => setupThemeRadio(radio, themePreview, themeView, defaultSrc, defaultAlt))
-    const checked = document.querySelector<HTMLInputElement>('input[name="theme"]:checked')
-    if (checked?.value) updateThemePreview(themePreview, checked.value, themeView, themeMap[checked.value].src, themeMap[checked.value].label)
+    const defaultSrc = preview.src;
+    const defaultAlt = preview.alt;
+
+    loadStoredTheme(preview, defaultSrc, defaultAlt, view);
+
+    const radios = document.querySelectorAll<HTMLInputElement>('input[name="theme"]');
+    radios.forEach(radio => setupThemeRadio(radio, preview, view, defaultSrc, defaultAlt));
 }
