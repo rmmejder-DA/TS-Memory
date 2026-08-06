@@ -74,9 +74,9 @@ body.theme-code * {
 .player-radio {
     appearance: none;
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #000;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #000;
     border-radius: 50%;
     background-color: #fff;
     cursor: pointer;
@@ -141,7 +141,7 @@ body.theme-code * {
         font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
-    font-family: 'RedRose';
+        font-family: 'RedRose';
     }
 }
 
@@ -157,6 +157,7 @@ body.theme-code * {
     border: none;
     transition: transform 0.3s ease;
     font-family: 'RedRose', sans-serif;
+
     &:hover {
         transform: scale(1.05);
     }
@@ -494,4 +495,18 @@ body.theme-food .card[data-matched="true"] .card__face--back img {
     flex-shrink: 0;
     width: 48px;
     height: 4px;
+}
+
+.game__themes .player-radio {
+    &:hover {
+        border: 3px solid #000;
+    }
+
+    &:hover::after {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background-color: #060606;
+    }
 }
