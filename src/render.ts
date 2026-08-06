@@ -68,7 +68,7 @@ export function renderField(count: number) {
 
     const theme = getStoredTheme()
     const images = theme === 'light' ? daImages : foodImages
-    const imagePath = theme === 'light' ? '/public/card-img-da/' : '/public/card-img-food/'
+    const imagePath = theme === 'light' ? '/card-img-da/' : '/card-img-food/'
     
     field.style.gridTemplateColumns = `repeat(${getGridCols(count)}, minmax(124px, 1fr))`
     field.innerHTML = generateDeck(count, images).map(src => renderCard(src, imagePath)).join('')
