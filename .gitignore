@@ -1,0 +1,22 @@
+# Abhängigkeiten
+node_modules/
+
+# Build-Ausgaben
+dist/
+
+# VS Code
+vscode/
+.vscode/
+
+# Umgebungsvariablen
+.env
+.env.local
+.env.*.local
+
+# Abhängigkeitsdateien
+package-lock.json
+yarn.lock
+
+# OS-Dateien
+.DS_Store
+Thumbs.db
