@@ -28,6 +28,10 @@ function updatePlayerPreview(preview: HTMLElement, playerView: HTMLElement | nul
  * Loads and selects the stored player from localStorage.
  */
 function loadStoredPlayer(boxes: NodeListOf<HTMLInputElement>) {
+    // Only load stored player if game was previously started
+    const gameStarted = localStorage.getItem('gameStarted')
+    if (!gameStarted) return
+    
     const storedPlayers = localStorage.getItem('selectedPlayers')
     if (storedPlayers) {
         try {

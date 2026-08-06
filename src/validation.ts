@@ -9,6 +9,14 @@ export function initRadioToggle() {
     players.forEach(player => player.addEventListener('change', validateForm))
 
     validateForm()
+    
+    // Set flag when Start button is clicked to enable loading stored settings on next visit
+    const readyBtn = document.getElementById('readyplay') as HTMLButtonElement
+    if (readyBtn) {
+        readyBtn.addEventListener('click', () => {
+            localStorage.setItem('gameStarted', 'true')
+        })
+    }
 }
 
 /**

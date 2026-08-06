@@ -36,6 +36,10 @@ function updateBoardDisplay(boardView: HTMLElement, count: number): void {
  * Loads and selects the stored board count from localStorage.
  */
 function loadStoredBoardCount(radios: NodeListOf<HTMLInputElement>) {
+    // Only load stored board count if game was previously started
+    const gameStarted = localStorage.getItem('gameStarted')
+    if (!gameStarted) return
+    
     const storedBoardCount = localStorage.getItem('boardCount')
     if (storedBoardCount) {
         const count = Number(storedBoardCount)
