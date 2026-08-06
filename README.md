@@ -1,4 +1,4 @@
-# TS-Memory
+# TS-Memory Game
 
 :video_game: A browser-based memory game built with TypeScript, Vite, and SCSS.
 
