@@ -33,13 +33,9 @@ function setupThemeRadio(radio: HTMLInputElement, preview: HTMLImageElement, vie
         const checked = document.querySelector<HTMLInputElement>('input[name="theme"]:checked')
         if (checked?.value) {
             const theme = themeMap[checked.value] ?? themeMap.light
-            updateThemePreview(preview, checked.value, view, theme.src, theme.label)
-        } else {
-            preview.src = defaultSrc
-            preview.alt = defaultAlt
-            if (view) view.textContent = "Game theme"
-            localStorage.removeItem('selectedTheme')
-        }
+            preview.src = theme.src
+            preview.alt = theme.label
+            if (view) view.textContent = theme.label}
     }
     radio.addEventListener("change", () => radio.checked && updateThemePreview(preview, radio.value, view, themeMap[radio.value]?.src ?? themeMap.light.src, themeMap[radio.value]?.label ?? themeMap.light.label))
     radio.addEventListener("mouseenter", () => preview.src = themeMap[radio.value]?.src ?? themeMap.light.src)
@@ -50,18 +46,25 @@ function setupThemeRadio(radio: HTMLInputElement, preview: HTMLImageElement, vie
 }
 
 /**
+ * Loads and selects the stored theme from localStorage.
+ */
+function loadStoredTheme() {
+    const storedTheme = localStorage.getItem('selectedTheme') || 'light'
+    const themeRadio = document.querySelector<HTMLInputElement>(`input[name="theme"][value="${storedTheme}"]`)
+    if (themeRadio) themeRadio.checked = true
+}
+
+/**
  * Initializes the theme selector with preview and event listeners.
  */
 export function initThemeSelector() {
     const themePreview = document.getElementById("theme-preview") as HTMLImageElement | null
     const themeView = document.getElementById("themeview")
     if (!themePreview) return
-    const defaultSrc = themePreview.src
-    const defaultAlt = themePreview.alt
-    document.querySelectorAll<HTMLInputElement>('input[name="theme"]').forEach(radio => setupThemeRadio(radio, themePreview, themeView, defaultSrc, defaultAlt))
+    loadStoredTheme()
+    const radios = document.querySelectorAll<HTMLInputElement>('input[name="theme"]')
+    const defaultSrc = themePreview.src, defaultAlt = themePreview.alt
+    radios.forEach(radio => setupThemeRadio(radio, themePreview, themeView, defaultSrc, defaultAlt))
     const checked = document.querySelector<HTMLInputElement>('input[name="theme"]:checked')
-    if (checked?.value) {
-        const theme = themeMap[checked.value]
-        updateThemePreview(themePreview, checked.value, themeView, theme.src, theme.label)
-    }
+    if (checked?.value) updateThemePreview(themePreview, checked.value, themeView, themeMap[checked.value].src, themeMap[checked.value].label)
 }

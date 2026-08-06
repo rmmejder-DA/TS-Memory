@@ -1,5 +1,3 @@
-// Player-Management
-
 /**
  * Gets the player icon source path.
  * @param value - Player identifier ('player1' or 'player2')
@@ -17,43 +15,28 @@ function getPlayerIconSrc(value: string): string {
  * @param boxes - NodeList of player checkbox elements
  */
 function updatePlayerPreview(preview: HTMLElement, playerView: HTMLElement | null, boxes: NodeListOf<HTMLInputElement>) {
-    // Ensure only one player is checked at a time
-    let checkedCount = 0
-    let selectedPlayer: string | null = null
-    boxes.forEach(box => {
-        if (box.checked) {
-            checkedCount++
-            if (checkedCount > 1) {
-                box.checked = false
-            } else {
-                selectedPlayer = box.value
-            }
-        }
-    })
-    
-    // Get the selected player
-    const selected = selectedPlayer ? [selectedPlayer] : []
-    
-    // Ensure exactly 2 players: selected first, then the other
-    let playersToStore: string[] = []
-    if (selected.length > 0) {
-        playersToStore = [selected[0]]
-        const other = selected[0] === 'player1' ? 'player2' : 'player1'
-        playersToStore.push(other)
-    } else {
-        playersToStore = ['player1', 'player2']
-    }
-    
-    // Update preview display
-    const html = selected.map(r => `<img src="${getPlayerIconSrc(r)}" alt="${r}">`).join("")
+    const selected = Array.from(boxes).find(box => box.checked)?.value ?? null
+    const playersToStore = selected ? [selected, selected === 'player1' ? 'player2' : 'player1'] : ['player1', 'player2']
+    const html = selected ? `<img src="${getPlayerIconSrc(selected)}" alt="${selected}">` : ''
     preview.innerHTML = html
-    preview.style.display = selected.length ? "flex" : "none"
-    preview.style.justifyContent = "center"
-    preview.style.alignItems = "center"
-    if (playerView) playerView.style.display = selected.length ? "none" : "inline"
-    
-    // Always store 2 players
+    preview.style.cssText = `display: ${selected ? 'flex' : 'none'}; justify-content: center; align-items: center`
+    if (playerView) playerView.style.display = selected ? 'none' : 'inline'
     localStorage.setItem("selectedPlayers", JSON.stringify(playersToStore))
+}
+
+/**
+ * Loads and selects the stored player from localStorage.
+ */
+function loadStoredPlayer(boxes: NodeListOf<HTMLInputElement>) {
+    const storedPlayers = localStorage.getItem('selectedPlayers')
+    if (storedPlayers) {
+        try {
+            const players = JSON.parse(storedPlayers) as string[]
+            Array.from(boxes).find(box => box.value === players[0])?.click()
+        } catch (e) {
+            console.error('Error parsing stored players:', e)
+        }
+    }
 }
 
 /**
@@ -64,16 +47,10 @@ export function initPlayerSelector() {
     const playerView = document.getElementById("playerview")
     const boxes = document.querySelectorAll<HTMLInputElement>('input[name="player"]')
     if (!preview || !boxes.length) return
-    boxes.forEach(box => {
-        box.addEventListener("change", () => {
-            // Uncheck the other player if this one is checked
-            if (box.checked) {
-                boxes.forEach(b => {
-                    if (b !== box) b.checked = false
-                })
-            }
-            updatePlayerPreview(preview, playerView, boxes)
-        })
-    })
+    loadStoredPlayer(boxes)
+    Array.from(boxes).forEach(box => box.addEventListener("change", () => {
+        Array.from(boxes).forEach(b => b !== box && (b.checked = false))
+        updatePlayerPreview(preview, playerView, boxes)
+    }))
     updatePlayerPreview(preview, playerView, boxes)
 }

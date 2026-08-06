@@ -14,10 +14,10 @@ function getBoardCount(radios: NodeListOf<HTMLInputElement>): number {
  * @param count - The number of cards to store
  */
 function updateLocalStorage(count: number): void {
-    if (count) {
-        localStorage.setItem('boardCount', String(count))
+    if (count > 0) {
+        localStorage.setItem("boardCount", count.toString());
     } else {
-        localStorage.removeItem('boardCount')
+        localStorage.removeItem("boardCount");
     }
 }
 
@@ -33,16 +33,27 @@ function updateBoardDisplay(boardView: HTMLElement, count: number): void {
 }
 
 /**
+ * Loads and selects the stored board count from localStorage.
+ */
+function loadStoredBoardCount(radios: NodeListOf<HTMLInputElement>) {
+    const storedBoardCount = localStorage.getItem('boardCount')
+    if (storedBoardCount) {
+        const count = Number(storedBoardCount)
+        const boardValue = count === 16 ? '4x4' : count === 24 ? '4x6' : '6x6'
+        Array.from(radios).find(radio => radio.value === boardValue)?.click()
+    }
+}
+
+/**
  * Initializes the board size selector with radio button listeners.
  */
 export function initBoardSelector() {
     const boardView = document.getElementById("boardview")
     const radios = document.querySelectorAll<HTMLInputElement>('input[name="board"]')
     if (!boardView || !radios.length) return
-
+    loadStoredBoardCount(radios)
     const update = () => updateBoardDisplay(boardView, getBoardCount(radios))
     radios.forEach(radio => radio.addEventListener("change", update))
-    update()
 }
 
 /**
@@ -53,4 +64,10 @@ export function initBoardStateOnPlay() {
         const stored = localStorage.getItem('boardCount')
         if (stored) renderField(Number(stored))
     }
+}
+
+const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+
+if (navigation?.type === "reload") {
+    localStorage.clear();
 }

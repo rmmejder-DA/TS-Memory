@@ -98,12 +98,10 @@ function setupCardClickListener(field: HTMLElement, state: GameState) {
 function handleCardClick(e: Event, field: HTMLElement, state: GameState) {
     const card = (e.target as HTMLElement).closest(".card") as HTMLButtonElement
     if (!card || state.lockBoard || state.gameOver || card.classList.contains("is-flipped") || card.dataset.matched) return
-    if (state.openedCards.length >= 2) return
-
     card.classList.add("is-flipped")
     state.openedCards.push(card)
     if (state.openedCards.length < 2) return
-
+    state.lockBoard = true
     const [first, second] = state.openedCards
     checkMatch(first, second, state)
 }
@@ -135,11 +133,10 @@ function handleMatch(first: HTMLButtonElement, second: HTMLButtonElement, state:
     state.matchedPairs++
     updateScoresUI(state)
     state.resetCards()
+    state.lockBoard = false
     if (state.isWin()) {
         state.gameOver = true
-        window.setTimeout(() => {
-            showGameOver(state)
-        }, 3000)
+        window.setTimeout(() => showGameOver(state), 1500)
     }
 }
 

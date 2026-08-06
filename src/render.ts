@@ -61,38 +61,20 @@ function renderCard(src: string, imagePath: string) {
 }
 
 /**
- * Calculates the number of grid columns based on card count.
- * @param count - The total number of cards
- * @returns The number of columns (4 or 6)
- */
-function getGridCols(count: number): number {
-    return count === 24 || count === 36 ? 6 : 4
-}
-
-/**
- * Generates a shuffled deck of card image names.
- * @param count - The total number of cards
- * @param images - Array of available image filenames
- * @returns Shuffled array of card image names
- */
-function generateDeck(count: number, images: string[]): string[] {
-    const pairs = count / 2
-    const backs = images.slice(0, pairs)
-    return [...backs, ...backs].sort(() => Math.random() - 0.5)
-}
-
-/**
  * Renders the game field with cards based on selected board size and theme.
  * @param count - The number of cards to display
  */
 export function renderField(count: number) {
     const field = document.getElementById('field')
     if (!field) return
-
     const theme = getStoredTheme()
     const images = theme === 'light' ? daImages : foodImages
     const imagePath = theme === 'light' ? '/card-img-da/' : '/card-img-food/'
-    
-    field.style.gridTemplateColumns = `repeat(${getGridCols(count)}, minmax(124px, 1fr))`
-    field.innerHTML = generateDeck(count, images).map(src => renderCard(src, imagePath)).join('')
+    const pairs = count / 2
+    const deck = [...images.slice(0, pairs), ...images.slice(0, pairs)].sort(() => Math.random() - 0.5)
+    field.style.gridTemplateColumns = `repeat(${count === 24 || count === 36 ? 6 : 4}, minmax(124px, 1fr))`
+    field.innerHTML = ''
+    for (let i = 0; i < deck.length; i++) {
+        field.innerHTML += renderCard(deck[i], imagePath)
+    }
 }

@@ -67,5 +67,7 @@ export const getPlayerIcon = (player: string, theme: string) => {
  * @param theme - The theme to apply ('light' or 'dark')
  */
 export const setBodyTheme = (theme: string) => {
-    document.body.className = theme === 'light' ? 'theme-code' : 'theme-food'
+    document.body.className = theme === "light"
+        ? "theme-code"
+        : "theme-food";
 }
