@@ -4,8 +4,8 @@ interface Theme {
 }
 
 const globalThemeMap: Record<string, Theme> = {
-    light: { label: 'Code vibes theme', src: 'public/images/da-style.png' },
-    dark: { label: 'Foods theme', src: 'public/images/vibe-style.png' }
+    light: { label: 'Code vibes theme', src: 'images/da-style.png' },
+    dark: { label: 'Foods theme', src: 'images/vibe-style.png' }
 };
 
 /**
