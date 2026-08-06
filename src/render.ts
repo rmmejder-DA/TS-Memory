@@ -1,8 +1,9 @@
-// Rendering-Funktionen
-
 import { getStoredTheme } from './utils'
 
-// Konstanten außerhalb der Funktion - 18 unterschiedliche Karten pro Theme
+/**
+ * Array of developer/tech-themed card images for the 'Code vibes' theme.
+ * Contains 18 unique card images.
+ */
 const daImages = [
     'angular.png', 
     'BB.png',
@@ -24,6 +25,10 @@ const daImages = [
     'vscode.png'
 ]
 
+/**
+ * Array of food-themed card images for the 'Foods theme'.
+ * Contains 18 unique card images.
+ */
 const foodImages = [
     'brezel.png',
     'burger.png',
@@ -45,23 +50,41 @@ const foodImages = [
      'wrap.png'
 ]
 
+/**
+ * Creates a card HTML element.
+ * @param src - The card image filename
+ * @param imagePath - The base path to the image directory
+ * @returns The HTML string for a card button
+ */
 function renderCard(src: string, imagePath: string) {
     return `<button class="card" data-image="${src}"><div class="card__inner"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><img src="${imagePath}${src}" alt="card"></div></div></button>`
 }
 
+/**
+ * Calculates the number of grid columns based on card count.
+ * @param count - The total number of cards
+ * @returns The number of columns (4 or 6)
+ */
 function getGridCols(count: number): number {
     return count === 24 || count === 36 ? 6 : 4
 }
 
+/**
+ * Generates a shuffled deck of card image names.
+ * @param count - The total number of cards
+ * @param images - Array of available image filenames
+ * @returns Shuffled array of card image names
+ */
 function generateDeck(count: number, images: string[]): string[] {
-    if (count === 16) {
-        return images.slice(0, 16).sort(() => Math.random() - 0.5)
-    }
     const pairs = count / 2
     const backs = images.slice(0, pairs)
     return [...backs, ...backs].sort(() => Math.random() - 0.5)
 }
 
+/**
+ * Renders the game field with cards based on selected board size and theme.
+ * @param count - The number of cards to display
+ */
 export function renderField(count: number) {
     const field = document.getElementById('field')
     if (!field) return

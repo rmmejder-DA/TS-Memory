@@ -1,8 +1,9 @@
-// Gameplay-Logik
-
 import { getPlayerIcon } from './utils'
 import { GameState, getWinner } from './gamestate'
 
+/**
+ * Initializes the gameplay with board setup and event listeners.
+ */
 export function initGameplay() {
     const field = document.getElementById("field")
     if (!field) return
@@ -13,6 +14,10 @@ export function initGameplay() {
     setupTestingFunctions(state)
 }
 
+/**
+ * Sets up all UI update handlers for the game state.
+ * @param state - The current game state
+ */
 function setupUIUpdates(state: GameState) {
     updateScoresUI(state)
     updatePlayerViewUI(state)
@@ -20,11 +25,19 @@ function setupUIUpdates(state: GameState) {
     updateExitButtonIcon(state)
 }
 
+/**
+ * Updates the score display for all players.
+ * @param state - The current game state
+ */
 function updateScoresUI(state: GameState) {
     Array.from(document.querySelectorAll<HTMLElement>("#playerview #counter"))
         .forEach((span, i) => span.textContent = String(state.scores[i] ?? 0))
 }
 
+/**
+ * Updates the player view UI with current scores and icons.
+ * @param state - The current game state
+ */
 function updatePlayerViewUI(state: GameState) {
     const playerView = document.getElementById("playerview")
     if (!playerView) return
@@ -39,6 +52,10 @@ function updatePlayerViewUI(state: GameState) {
         .join("")
 }
 
+/**
+ * Updates the current player indicator icon.
+ * @param state - The current game state
+ */
 function updateCurrentPlayerUI(state: GameState) {
     const img = document.getElementById("player") as HTMLImageElement | null
     if (img) {
@@ -54,15 +71,30 @@ function updateCurrentPlayerUI(state: GameState) {
     }
 }
 
+/**
+ * Updates the exit button icon based on theme.
+ * @param state - The current game state
+ */
 function updateExitButtonIcon(state: GameState) {
     const img = document.querySelector<HTMLImageElement>(".exitGameBtn img")
     if (img) img.src = state.theme === 'light' ? '/icon/move_item.svg' : '/icon/move_item-orange.svg'
 }
 
+/**
+ * Attaches click listener to the game field.
+ * @param field - The game field element
+ * @param state - The current game state
+ */
 function setupCardClickListener(field: HTMLElement, state: GameState) {
     field.addEventListener("click", e => handleCardClick(e, field, state))
 }
 
+/**
+ * Handles card click events during gameplay.
+ * @param e - The click event
+ * @param field - The game field element
+ * @param state - The current game state
+ */
 function handleCardClick(e: Event, field: HTMLElement, state: GameState) {
     const card = (e.target as HTMLElement).closest(".card") as HTMLButtonElement
     if (!card || state.lockBoard || state.gameOver || card.classList.contains("is-flipped") || card.dataset.matched) return
@@ -76,6 +108,12 @@ function handleCardClick(e: Event, field: HTMLElement, state: GameState) {
     checkMatch(first, second, state)
 }
 
+/**
+ * Checks if two cards match and updates game state accordingly.
+ * @param first - First card element
+ * @param second - Second card element
+ * @param state - The current game state
+ */
 function checkMatch(first: HTMLButtonElement, second: HTMLButtonElement, state: GameState) {
     if (first.dataset.image === second.dataset.image) {
         handleMatch(first, second, state)
@@ -84,6 +122,12 @@ function checkMatch(first: HTMLButtonElement, second: HTMLButtonElement, state: 
     handleMismatch(first, second, state)
 }
 
+/**
+ * Handles a successful card match.
+ * @param first - First matched card
+ * @param second - Second matched card
+ * @param state - The current game state
+ */
 function handleMatch(first: HTMLButtonElement, second: HTMLButtonElement, state: GameState) {
     first.dataset.matched = "true"
     second.dataset.matched = "true"
@@ -99,6 +143,12 @@ function handleMatch(first: HTMLButtonElement, second: HTMLButtonElement, state:
     }
 }
 
+/**
+ * Handles a card mismatch by flipping them back.
+ * @param first - First card
+ * @param second - Second card
+ * @param state - The current game state
+ */
 function handleMismatch(first: HTMLButtonElement, second: HTMLButtonElement, state: GameState) {
     state.lockBoard = true
     setTimeout(() => {
@@ -111,12 +161,20 @@ function handleMismatch(first: HTMLButtonElement, second: HTMLButtonElement, sta
     }, 900)
 }
 
+/**
+ * Displays the game over screen with winner or draw information.
+ * @param state - The final game state
+ */
 function showGameOver(state: GameState) {
     if (document.querySelector('.game-over')) return
     const { isDraw, winner } = getWinner(state)
     isDraw ? showDrawModal(state) : showGameOverModal(state, winner)
 }
 
+/**
+ * Shows the draw result modal.
+ * @param state - The game state
+ */
 function showDrawModal(state: GameState) {
     const icon = state.theme === 'light' ? '/icon/icon_white-draw.svg' : '/icon/icon_white-draw-vibe.svg'
     const div = document.createElement('div')
@@ -126,6 +184,11 @@ function showDrawModal(state: GameState) {
     document.getElementById('backToStart')?.addEventListener('click', () => window.location.href = '/setting.html')
 }
 
+/**
+ * Shows the final scores modal.
+ * @param state - The game state
+ * @param winner - The winning player identifier
+ */
 function showGameOverModal(state: GameState, winner: string) {
     const overlay = document.createElement('div')
     overlay.className = 'game-over'
@@ -135,12 +198,24 @@ function showGameOverModal(state: GameState, winner: string) {
     setTimeout(() => showWinnerModal(state, winner), 1500)
 }
 
+/**
+ * Renders a single game over score item.
+ * @param player - Player identifier
+ * @param score - Player's final score
+ * @param theme - Current theme
+ * @returns HTML string for the score item
+ */
 function renderGameOverItem(player: string, score: number, theme: string) {
     const label = player === 'player1' ? 'Blue' : 'Orange'
     const labelMarkup = theme === 'light' ? `<span class="${player}">${label}</span>` : ''
     return `<li class="game-over__item game-over__item--${player}"><img src="${getPlayerIcon(player, theme)}" alt="${player}" class="game-over__item__icon">${labelMarkup}<span>${score}</span></li>`
 }
 
+/**
+ * Shows the winner modal with celebration.
+ * @param state - The game state
+ * @param winner - The winning player identifier
+ */
 function showWinnerModal(state: GameState, winner: string) {
     const safeWinner = winner === 'player1' || winner === 'player2' ? winner : 'player1'
     const label = safeWinner === 'player1' ? 'Blue' : 'Orange'
@@ -155,6 +230,10 @@ function showWinnerModal(state: GameState, winner: string) {
     document.getElementById('backToStart')?.addEventListener('click', () => window.location.href = '/setting.html')
 }
 
+/**
+ * Sets up testing/debugging functions on the window object.
+ * @param state - The game state
+ */
 function setupTestingFunctions(state: GameState) {
     (window as any).forceGameOver = () => showGameOver(state);
     (window as any).forceWinner = () => {

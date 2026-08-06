@@ -1,5 +1,6 @@
-// Form-Validierung
-
+/**
+ * Initializes form validation by attaching listeners to all radio and player inputs.
+ */
 export function initRadioToggle() {
     const radios = document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])')
     const players = document.querySelectorAll<HTMLInputElement>('input[name="player"]')
@@ -10,18 +11,20 @@ export function initRadioToggle() {
     validateForm()
 }
 
+/**
+ * Validates the form and enables/disables the ready button.
+ * Checks if all required radio groups are selected and at least one player is chosen.
+ */
 export function validateForm() {
     const readyBtn = document.getElementById('readyplay') as HTMLButtonElement
     if (!readyBtn) return
-
-    const radios = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])'))
+    const radios = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="radio"]:not([name="player"])'));
     const groups = Array.from(new Set(radios.map(r => r.name)))
     const radioOk = groups.every(n => document.querySelector<HTMLInputElement>(`input[type="radio"][name="${n}"]:checked`))
-    const playerOk = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="player"]')).some(c => c.checked)
+    const playerCheckboxes = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="player"]'))
+    const playerOk = playerCheckboxes.some(c => c.checked) // At least one player must be selected
     const allOk = radioOk && playerOk
-
     readyBtn.disabled = !allOk
-    Array.from(document.getElementsByClassName('startplay__button-icon')).forEach((img: any) => {
-        img.src = allOk ? '/icon/smart_display.svg' : '/icon/smart_display-disabled.svg'
-    })
+    const icon = allOk ? '/icon/smart_display.svg' : '/icon/smart_display-disabled.svg'
+    document.querySelectorAll('.startplay__button-icon').forEach((img: any) => img.src = icon)
 }

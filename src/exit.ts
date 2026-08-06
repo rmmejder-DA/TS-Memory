@@ -1,5 +1,6 @@
-// Exit-Popup Handler
-
+/**
+ * Initializes the exit game handler with popup and confirmation.
+ */
 export function initExitHandler() {
     const exitBtn = document.getElementById("exitGame") as HTMLButtonElement
     const popup = document.getElementById("exitPopup") as HTMLDivElement
@@ -10,5 +11,5 @@ export function initExitHandler() {
 
     exitBtn.addEventListener("click", () => popup.style.display = "flex")
     backBtn.addEventListener("click", () => popup.style.display = "none")
-    confirmBtn.addEventListener("click", () => window.location.href = "index.html")
+    confirmBtn.addEventListener("click", () => window.location.href = "setting.html")
 }

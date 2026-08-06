@@ -11,19 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
     init()
 })
 
+/**
+ * Initializes all game components and sets up the UI.
+ * Loads theme, players, board settings, and gameplay logic.
+ */
 function init() {
     initThemeSelector()
     initPlayerSelector()
     initBoardSelector()
     initBoardStateOnPlay()
-
-    const fieldRef = document.getElementById("field")
-    if (fieldRef) {
-        setBodyTheme(getStoredTheme())
-        initGameplay()
-        initExitHandler()
-    }
-
     initRadioToggle()
+    const fieldRef = document.getElementById("field")
+    if (fieldRef) setBodyTheme(getStoredTheme()), initGameplay(), initExitHandler()
 }
 
